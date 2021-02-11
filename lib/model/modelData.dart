@@ -1,20 +1,36 @@
 class Products{
+  String sellerId;
   String productName;
   String productPrice;
+   String type;
+  String productDescription;
   String location;
+  bool negotiable;
   String picture;
 
-  Products(this.productName, this.productPrice, this.location, this.picture);
+  Products();
 }
 
-List <Products> productList= [
-  Products('Kettle', '289500.0',"iyana alfa",'images/phone.jpg'),
-  Products('Iron', '2500.0',"Tanke",'images/shirt.jpg'),
-  Products('Car', '289500.0',"iyana alfa",'images/shirt.jpg'),
-  Products('house', '289500.0',"iyana alfa",'images/shirt.jpg'),
-  Products('House', '289500.0',"iyana alfa",'images/shirt.jpg'),
-  Products('Phone', '289500.0',"iyana alfa",'images/shirt.jpg'),
-  Products('Phone', '289500.0',"iyana alfa",'images/shirt.jpg'),
+class Products1{
+  String productName;
+  String productPrice;
+   //String type;
+  //String productDescription;
+  String location;
+  //bool negotiable;
+  String picture;
+
+  Products1(this.productName, this.productPrice,this.location,this.picture);
+}
+
+List <Products1> productList= [
+  Products1('Kettle', '289500.0',"iyana alfa",'images/phone.jpg'),
+  Products1('Iron', '2500.0',"Tanke",'images/shirt.jpg'),
+  Products1('Car', '289500.0',"iyana alfa",'images/shirt.jpg'),
+  Products1('house', '289500.0',"iyana alfa",'images/shirt.jpg'),
+  Products1('House', '289500.0',"iyana alfa",'images/shirt.jpg'),
+  Products1('Phone', '289500.0',"iyana alfa",'images/shirt.jpg'),
+  Products1('Phone', '289500.0',"iyana alfa",'images/shirt.jpg'),
 ];
 
 class MenuDetails{
@@ -31,3 +47,4 @@ class ViewProduct{
 
   ViewProduct(this.productId, this.name, this.description);
 }
+

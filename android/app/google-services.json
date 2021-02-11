@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "295271048917",
+    "firebase_url": "https://harmony-marketplace.firebaseio.com",
+    "project_id": "harmony-marketplace",
+    "storage_bucket": "harmony-marketplace.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295271048917:android:1bc0417642aa297ab7e45c",
+        "android_client_info": {
+          "package_name": "com.medal.trainapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295271048917-gb0tr90snvul7tehv18e0p7mfjmg180a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6KouVBgyDX94bcC7-2H8amdhV-iXcV9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295271048917-gb0tr90snvul7tehv18e0p7mfjmg180a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

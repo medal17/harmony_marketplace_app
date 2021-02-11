@@ -1,5 +1,5 @@
 name: trainapp
-description: An app for NRC 
+description: An app for NRC. 
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -17,14 +17,18 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  cloud_firestore:
+  firebase_auth:
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  provider: ^4.3.2+2
+  firebase_core:
   cupertino_icons: ^0.1.2
-  font_awesome_flutter:  
-
+  url_launcher: ^5.5.1
+  font_awesome_flutter:
+  image_picker: ^0.6.0+17
+  firebase_storage: ^3.0.3
+  cached_network_image: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

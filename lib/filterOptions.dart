@@ -67,53 +67,56 @@ class _FiltersState extends State<Filters> {
               ),
               child: ProductCondition(),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 25, left: 30, right: 30),
-                  padding: EdgeInsets.all(2),
-                  width: MediaQuery.of(context).size.width * 0.35,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      width: 1,
+            Container(
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(top: 25, left: 30, right: 30),
+                    padding: EdgeInsets.all(2),
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    decoration: BoxDecoration(
                       color: Colors.white,
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.white,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextField(
-                    style: TextStyle(fontSize: 18),
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      prefixText: ' -N- ',
-                      border: InputBorder.none,
-                      labelText: "Min Price",
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 25, left: 30, right: 30),
-                  padding: EdgeInsets.all(1),
-                  width: MediaQuery.of(context).size.width * 0.35,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                      width: 1,
-                      color: Colors.white,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextField(
-                    style: TextStyle(fontSize: 18),
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
+                    child: TextField(
+                      style: TextStyle(fontSize: 18),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
                         prefixText: ' -N- ',
                         border: InputBorder.none,
-                        labelText: "Max Price"),
+                        labelText: "Min Price",
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                  Container(
+                    margin: EdgeInsets.only(top: 25, left: 10, right: 30),
+                    padding: EdgeInsets.all(1),
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.white,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextField(
+                      style: TextStyle(fontSize: 18),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          prefixText: ' -N- ',
+                          border: InputBorder.none,
+                          labelText: "Max Price"),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Container(
               margin: EdgeInsets.only(top: 25),

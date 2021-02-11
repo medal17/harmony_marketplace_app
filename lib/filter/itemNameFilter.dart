@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:trainapp/model/modelData.dart';
 
 import '../config file.dart';
 
@@ -9,6 +10,9 @@ class ItemName extends StatefulWidget {
 }
 
 class _ItemNameState extends State<ItemName> {
+  
+  Products products = Products();
+  
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -22,10 +26,11 @@ class _ItemNameState extends State<ItemName> {
               hint: Text('Item', style: TextStyle(fontSize: 19)),
               value: mySelection,
               onChanged: (String newValue){
-                setState((){
+                
                   mySelection=newValue;
-                });
-                print(mySelection);
+                  products.productName = mySelection;
+               
+                print(products.productName);
               },
               items: myJson.map((Map map){
                 return DropdownMenuItem<String>(

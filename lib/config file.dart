@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trainapp/profileScreen.dart';
 import 'package:trainapp/sellProduct.dart';
+import 'package:trainapp/wishList.dart';
+
+import 'MessageList.dart';
 
 Color primaryGreen = Color(0xff004240);
 List<BoxShadow> shadowList = [
   BoxShadow(color: Colors.grey[300], blurRadius: 30, offset: Offset(0, 10))
+];
+List<BoxShadow> shadowListBlack = [
+  BoxShadow(color: Colors.black54, blurRadius: 30, offset: Offset(0, 10))
 ];
 
 List<Icon> categories = [
@@ -14,16 +20,21 @@ List<Icon> categories = [
     color: Colors.blueGrey[300],
     size: 29,
   ),
-  Icon(Icons.shopping_cart, color: Colors.blueGrey[300], size: 29),
-  Icon(Icons.payment, color: Colors.blueGrey[300], size: 29),
-  Icon(Icons.home, color: Colors.blueGrey[300], size: 29),
+  Icon(Icons.computer, color: Colors.blueGrey[500], size: 29),
+  Icon(FontAwesomeIcons.cottonBureau, color: Colors.blueGrey[500], size: 29),
+  Icon(FontAwesomeIcons.cookieBite, color: Colors.blueGrey[500], size: 29),
+  Icon(FontAwesomeIcons.building, color: Colors.blueGrey[500], size: 29),
+  Icon(FontAwesomeIcons.car, color: Colors.blueGrey[500], size: 29),
+  
 ];
 
 List<String> menuTag = [
-  'Home',
-  'My Cart',
-  'Payment',
-  'home',
+  'All',
+  'Computers',
+  'Fashion',
+  'Food Items',
+  'Housing',
+  'Rides',
 ];
 
 List<Map> drawerMenu = [
@@ -33,7 +44,7 @@ List<Map> drawerMenu = [
     'icon' : FontAwesomeIcons.plusCircle,
     'title' : 'Add Product'
   },*/
-  {'icon': Icons.favorite, 'title': 'Favourites'},
+  {'icon': Icons.favorite, 'title': 'Wish List'},
   {'icon': Icons.email, 'title': 'Messages'},
   {'icon': FontAwesomeIcons.userAlt, 'title': 'Profile'}
 ];
@@ -81,6 +92,12 @@ navigate(BuildContext context, String link) {
       break;
     case "Sell Product":
       Navigator.push(context, MaterialPageRoute(builder: (_) => SellProduct()));
+      break;
+    case "Messages":
+      Navigator.push(context, MaterialPageRoute(builder: (_) => MessageUi()));
+      break;
+    case "Wish List":
+      Navigator.push(context, MaterialPageRoute(builder: (_) => WishList()));
       break;
 
   }

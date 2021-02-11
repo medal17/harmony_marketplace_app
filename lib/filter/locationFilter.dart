@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trainapp/config%20file.dart';
+import 'package:trainapp/model/modelData.dart';
 
 class LocationFilter extends StatefulWidget {
   @override
@@ -7,6 +8,9 @@ class LocationFilter extends StatefulWidget {
 }
 
 class _LocationFilterState extends State<LocationFilter> {
+
+  Products products = Products();
+  
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -20,10 +24,11 @@ class _LocationFilterState extends State<LocationFilter> {
               hint: Text('Location', style: TextStyle(fontSize: 19)),
               value: locationSelected,
               onChanged: (String newValue1){
-                setState((){
+                
                   locationSelected=newValue1;
-                });
-                print(locationSelected);
+                  products.location =  locationSelected;
+            
+                print(products.location);
               },
               items: place.map((Map map1){
                 return DropdownMenuItem<String>(

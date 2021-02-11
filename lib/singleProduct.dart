@@ -1,18 +1,16 @@
+//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:trainapp/config%20file.dart';
-import 'package:trainapp/model/modelData.dart';
+//import 'package:trainapp/model/modelData.dart';
 
-class SingleProduct extends StatefulWidget {
-  final Products product;
+class SingleProduct extends StatelessWidget {
+  final product;
   //final ViewProduct viewProduct;
   SingleProduct({this.product});
-  @override
-  _SingleProductState createState() => _SingleProductState();
-}
 
-class _SingleProductState extends State<SingleProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,41 +22,64 @@ class _SingleProductState extends State<SingleProduct> {
             Expanded(
               child: Container(
                 color: Colors.blueGrey,
+                child: Container(
+                  padding: EdgeInsets.only(right: 10),
+                  child: CachedNetworkImage(
+                    imageUrl: product['picture1'],
+                    fit: BoxFit.fill,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    //product['picture1'],
+                    //'images/shirt.jpg',
+                  ),
+                ),
               ),
             ),
             Expanded(
               child: Container(
-                alignment: Alignment.topCenter,
-                //schild: Image.asset('images/phone.jpg'),
+                margin: EdgeInsets.only(top: 80),
+                alignment: Alignment.topLeft,
+                child: Text(product['Description']),
               ),
             )
           ],
         )),
         Container(
-          margin: EdgeInsets.only(top: 30, left: 10),
+          //padding: EdgeInsets.only(top: 15),
           child: Align(
             alignment: Alignment.topCenter,
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.arrow_back_ios, color: Colors.white,),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-              ],
+            child: Container(
+              padding: EdgeInsets.only(top: 20),
+              color: Colors.blueGrey.withOpacity(0.7),
+              child: Row(
+                children: <Widget>[
+                  IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                ],
+              ),
             ),
           ),
         ),
-        Container(
-          child: Image.asset(
-            'images/phone.jpg',
-            fit: BoxFit.cover,
-          ),
-        ),
+        /*Container(
+          padding: EdgeInsets.only(right: 10),
+          child: CachedNetworkImage(
+            imageUrl: product['picture1'], 
+            fit: BoxFit.fill,
+            placeholder: (context,url)=>CircularProgressIndicator(),
+              //product['picture1'],
+              //'images/shirt.jpg',
+             
+            ),
+        ),*/
         Align(
           alignment: Alignment.center,
           child: Container(
-            height: 140,
+            height: 100,
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -67,30 +88,18 @@ class _SingleProductState extends State<SingleProduct> {
             child: Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 15, horizontal: 18),
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 18),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(
-                        'Nokia 3310',
-                        style: TextStyle(fontFamily: 'genuine', fontSize: 30),
-                      ),
-                      Text('15,200 naira',
+                      Expanded(
+                        child: Text(
+                          product['title'],
                           style: TextStyle(
                               fontFamily: 'genuine',
-                              fontSize: 25,
-                              fontWeight: FontWeight.w200)),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Android Mobile',
-                        style: TextStyle(fontFamily: 'genuine', fontSize: 14),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w200),
+                        ),
                       ),
                       Text('2 days Ago',
                           style: TextStyle(
@@ -101,23 +110,22 @@ class _SingleProductState extends State<SingleProduct> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: EdgeInsets.symmetric(horizontal: 15),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Icon(Icons.add_location),
-                      Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Text(
-                            '123, Tanke road, ilorin, kwara State',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.blueGrey),
-                          ))
+                      Text(
+                        product['type'],
+                        style: TextStyle(fontFamily: 'genuine', fontSize: 17),
+                      ),
+                      Text('-N- ' + product['price'],
+                          style: TextStyle(
+                              fontFamily: 'genuine',
+                              fontSize: 25,
+                              fontWeight: FontWeight.w200)),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -125,7 +133,7 @@ class _SingleProductState extends State<SingleProduct> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-              height: 110,
+              height: 60,
               decoration: BoxDecoration(
                   color: Colors.blueGrey[100],
                   borderRadius: BorderRadius.circular(15)),
@@ -135,28 +143,56 @@ class _SingleProductState extends State<SingleProduct> {
                     decoration: BoxDecoration(
                         color: primaryGreen,
                         borderRadius: BorderRadius.circular(20)),
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    height: 60,
-                    width: 70,
-                    child: Icon(Icons.favorite_border, color: Colors.white,),
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    height: 50,
+                    width: 60,
+                    child: Icon(
+                      Icons.favorite_border,
+                      color: Colors.white,
+                    ),
                   ),
                   Expanded(
                     child: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                           color: primaryGreen,
-                          borderRadius: BorderRadius.circular(20)),
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      height: 60,
-                      child: Text(
-                        'Interested',
-                        style: TextStyle(
-                            fontFamily: 'genuine',
-                            fontSize: 25,
-                            color: Colors.white),
+                          borderRadius: BorderRadius.circular(17)),
+                      margin: EdgeInsets.symmetric(horizontal: 13),
+                      height: 50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.chat,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Show Interest',
+                            style: TextStyle(
+                                fontFamily: 'genuine',
+                                fontWeight: FontWeight.w200,
+                                fontSize: 20,
+                                color: Colors.white),
+                          ),
+                        ],
                       ),
                     ),
-                  )
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: primaryGreen,
+                        borderRadius: BorderRadius.circular(20)),
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    height: 50,
+                    width: 60,
+                    child: Icon(
+                      Icons.call,
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               )),
         )

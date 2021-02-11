@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:trainapp/config%20file.dart';
-import 'package:trainapp/logInScreen.dart';
+//import 'package:trainapp/logInScreen.dart';
 import 'package:trainapp/signUp.dart';
+
+import 'api/Firebase_Api.dart';
+import 'notifier/Auth_Notifier.dart';
 
 class DrawerScreen extends StatefulWidget {
   @override
@@ -11,6 +15,8 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
+
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
     return Container(
       color: primaryGreen,
       child: Container(
@@ -30,12 +36,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Medal Austine',
+                        authNotifier.user != null ?authNotifier.user.email:"Sign in",
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'genuine',
-                            fontSize: 23,
-                            fontWeight: FontWeight.w200),
+                            fontSize: 20,
+                            fontWeight: FontWeight.w100),
                       ),
                       Text(
                         'Status: Active',
@@ -106,12 +112,17 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 SizedBox(
                   width: 15,
                 ),
-                Text('Logout',
-                    style: TextStyle(
-                        color: Colors.blueGrey[300],
-                        fontWeight: FontWeight.w200,
-                        fontSize: 19,
-                        fontFamily: 'genuine',)),
+                GestureDetector(
+                  onTap: (){
+                    signout(authNotifier);
+                  },
+                    child: Text('Logout',
+                      style: TextStyle(
+                          color: Colors.blueGrey[300],
+                          fontWeight: FontWeight.w200,
+                          fontSize: 19,
+                          fontFamily: 'genuine',)),
+                ),
               ],
             )
           ],
