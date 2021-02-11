@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 //import 'package:trainapp/model/modelData.dart';
 import 'package:trainapp/config file.dart';
+import 'package:trainapp/model/modelData.dart';
 
 class ProductCondition extends StatefulWidget {
   @override
   _ProductConditionState createState() => _ProductConditionState();
+
 }
 
 class _ProductConditionState extends State<ProductCondition> {
+
+Products products = Products();
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,10 +28,13 @@ class _ProductConditionState extends State<ProductCondition> {
                   hint: Text('Condition', style: TextStyle(fontSize: 19),),
                   value: productCondition,
                   onChanged: (String newCategory){
-                    setState((){
+                    
                       productCondition=newCategory;
-                    });
-                    print(productCondition);
+                      products.type = productCondition;
+                      
+                   
+                    print(products.type);
+                    //return products.type;
                   },
                   items: conditionList.map((Map conditionMap){
                     return DropdownMenuItem<String>(

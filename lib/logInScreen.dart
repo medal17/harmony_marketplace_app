@@ -1,71 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:trainapp/config%20file.dart';
+//import 'package:trainapp/gateWay.dart';
+import 'package:trainapp/signUp.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'api/Firebase_Api.dart';
+import 'model/userModel.dart';
+import 'notifier/Auth_Notifier.dart';
 
-class LoginScreen extends StatelessWidget {
+class LogInScreen extends StatefulWidget {
   @override
+  _LogInScreenState createState() => _LogInScreenState();
+}
+
+class _LogInScreenState extends State<LogInScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
+  LocalUser _user = LocalUser();
+
+  @override
+  void initState() {
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen:false);
+    initializeCurrentUser(authNotifier);
+    super.initState();
+     
+  }
+  
+  void _submitForm() {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen:false);
+    login(_user, authNotifier);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            alignment: Alignment.center,
+    body: Form(
+        key: _formKey,
+        autovalidate: true,
+        child: SingleChildScrollView(
+    child: Container(
+      alignment: Alignment.center,
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       color: Colors.blueGrey[100],
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.zero,
-              child: Text(
-                'Login with',
-                style: TextStyle(
-                    fontFamily: 'genuine',
-                    fontWeight: FontWeight.w200,
-                    fontSize: 20,
-                    color: primaryGreen),
-              ),
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(bottom: 13),
+            child: Text(
+              'Sign In',
+              style: TextStyle(
+                  fontFamily: 'genuine',
+                  fontWeight: FontWeight.w200,
+                  fontSize: 25,
+                  color: primaryGreen),
             ),
-            Container(
-              padding:
-                  EdgeInsets.only(left: 100, right: 100, top: 20, bottom: 60),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.indigo,
-                        borderRadius: BorderRadius.circular(10)),
-                    height: 80,
-                    width: 80,
-                    child: Center(
-                        child: Text(
-                      'f',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    )),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(10)),
-                    height: 80,
-                    width: 80,
-                    child: Center(
-                        child: Text(
-                      'G',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    )),
-                  ),
-                ],
-              ),
-            ),
-            Row(
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
@@ -90,84 +88,131 @@ class LoginScreen extends StatelessWidget {
                           bottomRight: Radius.circular(10))),
                   width: MediaQuery.of(context).size.width * 0.5,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child:TextField(
-                      style: TextStyle(fontSize: 18),
-                    decoration: InputDecoration(
-                      hintText: 'Username',
-                      border: InputBorder.none
+                    padding: const EdgeInsets.only(left: 5),
+                    child: TextFormField(
+                      //obscureText: true,
+                      //keyboardType: Keyboar,
+                      decoration: InputDecoration(
+                        hintText: 'Username',
+                        focusedBorder: InputBorder.none,
+                        border: InputBorder.none,
+                      ),
+                      validator: (String value){
+                        if(value.isEmpty){
+                          return 'Input your Username';
+                        }
+                        if(value.length<5){
+                          return 'Username must be between 5 and 12';
+                        }
+                        return null;
+                      },
+                      onSaved: (String value){
+                        _user.email= value;
+                      },
                     ),
-                  ),
                   ),
                 )
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                        color: primaryGreen,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10))),
-                    height: 47,
-                    width: 50,
-                    child: Icon(
-                      FontAwesomeIcons.key,
-                      size: 17,
-                      color: Colors.white70,
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      color: primaryGreen,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10))),
+                  height: 47,
+                  width: 50,
+                  child: Icon(
+                    FontAwesomeIcons.key,
+                    size: 17,
+                    color: Colors.white70,
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10))),
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        focusedBorder: InputBorder.none,
+                        border: InputBorder.none,
+                      ),
+                       validator: (String value){
+                        if(value.isEmpty){
+                          return 'Input your Username';
+                        }
+                        if(value.length<5 || value.length>12){
+                          return 'Password must be between 5 and 12';
+                        }
+                        return null;
+                      },
+                      onSaved: (String value){
+                        _user.password = value;
+                      },
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10))),
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          focusedBorder: InputBorder.none,
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                )
+              ],
             ),
-            Container(
+          ),
+          GestureDetector(
+            onTap: () {
+              _submitForm();
+              print('tapped');
+            },
+            child: Container(
               margin: EdgeInsets.only(top: 5),
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 100),
+              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 90),
               child: Text(
-                'Login',
+                'sign In',
                 style: TextStyle(
-                    color: Colors.white, fontFamily: 'genuine', fontSize: 20),
+                    color: Colors.white,
+                    fontFamily: 'genuine',
+                    fontSize: 20),
               ),
               decoration: BoxDecoration(
-                  color: primaryGreen, borderRadius: BorderRadius.circular(10)),
+                  color: primaryGreen,
+                  borderRadius: BorderRadius.circular(10)),
             ),
-            Container(
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => SignUpScreen()));
+            },
+            child: Container(
               margin: EdgeInsets.only(top: 30),
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 60),
               child: Text(
-                'Sign up',
+                'Sign Up',
                 style: TextStyle(
-                    color: Colors.white, fontFamily: 'genuine', fontSize: 20),
+                    color: Colors.white,
+                    fontFamily: 'genuine',
+                    fontSize: 20),
               ),
               decoration: BoxDecoration(
-                  color: Colors.black, borderRadius: BorderRadius.circular(10)),
-            )
-          ],
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+          )
+        ],
       ),
     ),
-        ));
+        ),
+      ));
   }
 }
