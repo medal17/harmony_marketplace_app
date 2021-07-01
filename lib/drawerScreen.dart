@@ -15,14 +15,13 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
-
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
     return Container(
       color: primaryGreen,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
         child: Column(
-
           children: <Widget>[
             Row(
               children: <Widget>[
@@ -36,7 +35,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        authNotifier.user != null ?authNotifier.user.email:"Sign in",
+                        authNotifier.user != null
+                            ? authNotifier.user.email
+                            : "Sign in",
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'genuine',
@@ -57,31 +58,40 @@ class _DrawerScreenState extends State<DrawerScreen> {
             ),
             Expanded(
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 90),
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: drawerMenu.map((element)=>GestureDetector(
-                      onTap: (){
-                        print(element["title"]);
-                        navigate(context, element["title"]);
-                      },
-                      child: Row(
-                        children: <Widget>[
-                          Icon(element['icon'],
-                          color: Colors.blueGrey[400],),
-                          SizedBox(width: 15,),
-                          Text(element['title'],
-                              style: TextStyle(
-                                color: Colors.blueGrey[300],
-                                fontWeight: FontWeight.w200,
-                                fontSize: 20,
-                                fontFamily: 'genuine',)),
-
-                        ],
+              margin: EdgeInsets.symmetric(vertical: 90),
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: drawerMenu
+                    .map(
+                      (element) => GestureDetector(
+                        onTap: () {
+                          print(element["title"]);
+                          navigate(context, element["title"]);
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              element['icon'],
+                              color: Colors.blueGrey[400],
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Text(element['title'],
+                                style: TextStyle(
+                                  color: Colors.blueGrey[300],
+                                  fontWeight: FontWeight.w200,
+                                  fontSize: 16,
+                                  fontFamily: 'genuine',
+                                )),
+                          ],
+                        ),
                       ),
-                    ),).toList(),
-                  ),
+                    )
+                    .toList(),
+              ),
             )),
             Row(
               children: <Widget>[
@@ -101,8 +111,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   width: 30,
                 ),*/
                 GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (_)=>SignUpScreen()));
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => SignUpScreen()));
                   },
                   child: Icon(
                     Icons.power_settings_new,
@@ -113,15 +124,16 @@ class _DrawerScreenState extends State<DrawerScreen> {
                   width: 15,
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     signout(authNotifier);
                   },
-                    child: Text('Logout',
+                  child: Text('Logout',
                       style: TextStyle(
-                          color: Colors.blueGrey[300],
-                          fontWeight: FontWeight.w200,
-                          fontSize: 19,
-                          fontFamily: 'genuine',)),
+                        color: Colors.blueGrey[300],
+                        fontWeight: FontWeight.w200,
+                        fontSize: 19,
+                        fontFamily: 'genuine',
+                      )),
                 ),
               ],
             )

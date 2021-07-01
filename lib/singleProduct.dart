@@ -36,9 +36,21 @@ class SingleProduct extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(top: 80),
+                margin: EdgeInsets.only(top: 60, left: 10, right: 10),
                 alignment: Alignment.topLeft,
-                child: Text(product['Description']),
+                child: Column(
+                  children: [
+                    Text(
+                      'Description',
+                      style: TextStyle(fontFamily: 'genuine', fontSize: 14),
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Text(product['Description']),
+                    // Text(product['number']),
+                  ],
+                ),
               ),
             )
           ],
@@ -79,13 +91,14 @@ class SingleProduct extends StatelessWidget {
         Align(
           alignment: Alignment.center,
           child: Container(
-            height: 100,
+            height: 90,
             margin: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: shadowList,
                 borderRadius: BorderRadius.circular(25)),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 18),
@@ -121,7 +134,7 @@ class SingleProduct extends StatelessWidget {
                       Text('-N- ' + product['price'],
                           style: TextStyle(
                               fontFamily: 'genuine',
-                              fontSize: 25,
+                              fontSize: 16,
                               fontWeight: FontWeight.w200)),
                     ],
                   ),
@@ -165,6 +178,7 @@ class SingleProduct extends StatelessWidget {
                           Icon(
                             Icons.chat,
                             color: Colors.white,
+                            size: 20,
                           ),
                           SizedBox(
                             width: 10,
@@ -174,7 +188,7 @@ class SingleProduct extends StatelessWidget {
                             style: TextStyle(
                                 fontFamily: 'genuine',
                                 fontWeight: FontWeight.w200,
-                                fontSize: 20,
+                                fontSize: 17,
                                 color: Colors.white),
                           ),
                         ],
@@ -191,6 +205,7 @@ class SingleProduct extends StatelessWidget {
                     child: Icon(
                       Icons.call,
                       color: Colors.white,
+                      size: 20,
                     ),
                   ),
                 ],

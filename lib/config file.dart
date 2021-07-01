@@ -18,14 +18,13 @@ List<Icon> categories = [
   Icon(
     Icons.home,
     color: Colors.blueGrey[300],
-    size: 29,
+    size: 20,
   ),
   Icon(Icons.computer, color: Colors.blueGrey[500], size: 29),
-  Icon(FontAwesomeIcons.cottonBureau, color: Colors.blueGrey[500], size: 29),
-  Icon(FontAwesomeIcons.cookieBite, color: Colors.blueGrey[500], size: 29),
-  Icon(FontAwesomeIcons.building, color: Colors.blueGrey[500], size: 29),
-  Icon(FontAwesomeIcons.car, color: Colors.blueGrey[500], size: 29),
-  
+  Icon(FontAwesomeIcons.cottonBureau, color: Colors.blueGrey[500], size: 20),
+  Icon(FontAwesomeIcons.cookieBite, color: Colors.blueGrey[500], size: 20),
+  Icon(FontAwesomeIcons.building, color: Colors.blueGrey[500], size: 20),
+  Icon(FontAwesomeIcons.car, color: Colors.blueGrey[500], size: 20),
 ];
 
 List<String> menuTag = [
@@ -99,6 +98,5 @@ navigate(BuildContext context, String link) {
     case "Wish List":
       Navigator.push(context, MaterialPageRoute(builder: (_) => WishList()));
       break;
-
   }
 }
