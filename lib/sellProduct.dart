@@ -65,25 +65,28 @@ class _SellProductState extends State<SellProduct> {
               child: Icon(
                 Icons.arrow_back_ios,
               )),
-          title: Text('Sell A Product'),
+          title: Text(
+            'Sell A Product',
+            style: TextStyle(fontSize: 16),
+          ),
         ),
-        backgroundColor: Colors.blueGrey[100],
+        backgroundColor: Colors.blueGrey[50],
         body: Stack(
           children: <Widget>[
             SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.075,
+                    height: 50,
                     margin: EdgeInsets.only(top: 20, left: 30, right: 30),
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.only(left: 10),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.white.withOpacity(0.5),
                       border: Border.all(
                         width: 1,
                         color: Colors.white,
                       ),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
                       decoration: InputDecoration(
@@ -104,16 +107,16 @@ class _SellProductState extends State<SellProduct> {
                     ),
                   ),
                   Container(
-                      height: MediaQuery.of(context).size.height * 0.075,
-                      margin: EdgeInsets.only(top: 20, left: 30, right: 30),
+                      height: 50,
+                      margin: EdgeInsets.only(top: 10, left: 30, right: 30),
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.white.withOpacity(0.5),
                         border: Border.all(
                           width: 1,
                           color: Colors.white,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,7 +128,7 @@ class _SellProductState extends State<SellProduct> {
                               child: DropdownButton<String>(
                                 isDense: true,
                                 hint: Text('Item',
-                                    style: TextStyle(fontSize: 19)),
+                                    style: TextStyle(fontSize: 15)),
                                 value: mySelection,
                                 onChanged: (String newValue) {
                                   setState(() {
@@ -156,16 +159,16 @@ class _SellProductState extends State<SellProduct> {
                         ],
                       )),
                   Container(
-                      height: MediaQuery.of(context).size.height * 0.075,
-                      margin: EdgeInsets.only(top: 20, left: 30, right: 30),
+                      height: 50,
+                      margin: EdgeInsets.only(top: 10, left: 30, right: 30),
                       padding: EdgeInsets.all(15),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.white.withOpacity(0.5),
                         border: Border.all(
                           width: 1,
                           color: Colors.white,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,7 +180,7 @@ class _SellProductState extends State<SellProduct> {
                               child: DropdownButton<String>(
                                 isDense: true,
                                 hint: Text('Location',
-                                    style: TextStyle(fontSize: 19)),
+                                    style: TextStyle(fontSize: 15)),
                                 value: locationSelected,
                                 onChanged: (String newValue1) {
                                   setState(() {
@@ -203,16 +206,16 @@ class _SellProductState extends State<SellProduct> {
                         ],
                       )),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.075,
-                    margin: EdgeInsets.only(top: 20, left: 30, right: 30),
+                    height: 50,
+                    margin: EdgeInsets.only(top: 10, left: 30, right: 30),
                     padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.white.withOpacity(0.5),
                       border: Border.all(
                         width: 1,
                         color: Colors.white,
                       ),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,7 +228,7 @@ class _SellProductState extends State<SellProduct> {
                               isDense: true,
                               hint: Text(
                                 'Condition',
-                                style: TextStyle(fontSize: 19),
+                                style: TextStyle(fontSize: 15),
                               ),
                               value: productCondition,
                               onChanged: (String newCategory) {
@@ -256,22 +259,22 @@ class _SellProductState extends State<SellProduct> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 25, left: 30, right: 30),
+                    margin: EdgeInsets.only(top: 10, left: 30, right: 30),
                     padding: EdgeInsets.all(1),
                     width: MediaQuery.of(context).size.width * 0.85,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Colors.white.withOpacity(0.5),
                       border: Border.all(
                         width: 1,
                         color: Colors.white,
                       ),
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
                       controller: description,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 15),
                       keyboardType: TextInputType.text,
-                      maxLines: 4,
+                      maxLines: 3,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         labelText: "Item Description",
@@ -286,20 +289,21 @@ class _SellProductState extends State<SellProduct> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(top: 20, left: 30, right: 30),
-                        padding: EdgeInsets.all(2),
+                        height: 50,
+                        margin: EdgeInsets.only(top: 10, left: 30, right: 30),
+                        // padding: EdgeInsets.all(2),
                         width: MediaQuery.of(context).size.width * 0.50,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.white.withOpacity(0.5),
                           border: Border.all(
                             width: 1,
                             color: Colors.white,
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: TextFormField(
                           controller: price,
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 15),
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             prefixText: ' -N- ',
@@ -318,20 +322,22 @@ class _SellProductState extends State<SellProduct> {
                         ),
                       ),
                       Container(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Checkbox(
-                            value: true,
-                            onChanged: (bool option) {
-                              if (option) {
-                                negotiable = true;
-                              }
-                            },
-                          ),
-                          Text("negotiable?", style: TextStyle(fontSize: 17))
-                        ],
-                      )),
+                          padding: EdgeInsets.only(top: 10),
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text("negotiable?",
+                                  style: TextStyle(fontSize: 14)),
+                              Checkbox(
+                                value: true,
+                                onChanged: (bool option) {
+                                  if (option) {
+                                    negotiable = true;
+                                  }
+                                },
+                              ),
+                            ],
+                          )),
                     ],
                   ),
                   Row(
@@ -343,8 +349,8 @@ class _SellProductState extends State<SellProduct> {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              color: Colors.white,
+                                  BorderRadius.all(Radius.circular(50)),
+                              color: Colors.white.withOpacity(0.5),
                             ),
                             height: 80,
                             width: 80,
@@ -416,22 +422,24 @@ class _SellProductState extends State<SellProduct> {
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  height: 80,
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  width: MediaQuery.of(context).size.width,
+                  height: 70,
                   decoration: BoxDecoration(
                       color: Colors.blueGrey[100],
-                      borderRadius: BorderRadius.circular(15)),
+                      borderRadius: BorderRadius.circular(5)),
                   child: Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 10),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 12, horizontal: 100),
-                    child: Text(
-                      loading ? 'Loading...' : 'Shelf Product',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight:
-                              loading ? FontWeight.w200 : FontWeight.w300,
-                          fontFamily: 'genuine',
-                          fontSize: 20),
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: Center(
+                      child: Text(
+                        loading ? 'Loading...' : 'Shelf Product',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight:
+                                loading ? FontWeight.w200 : FontWeight.w300,
+                            fontFamily: 'genuine',
+                            fontSize: 18),
+                      ),
                     ),
                     decoration: BoxDecoration(
                         color: loading ? Colors.black54 : primaryGreen,
