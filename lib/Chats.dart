@@ -10,16 +10,14 @@ import 'config file.dart';
 
 class Chats extends StatefulWidget {
   final String user;
-  final  String reciever;
+  final String reciever;
   Chats({this.user, this.reciever});
   @override
   _ChatsState createState() => _ChatsState();
-
 }
 
 class _ChatsState extends State<Chats> {
-  
- /*_typeMessage() {
+  /*_typeMessage() {
    Container(
      margin: EdgeInsets.all(15.0),
      height: 61,
@@ -67,62 +65,55 @@ class _ChatsState extends State<Chats> {
 */
   loadMessage(DocumentSnapshot message, bool isMe) {
     final Container myMessage = Container(
-
       decoration: isMe
           ? BoxDecoration(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
                   bottomLeft: Radius.circular(10),
                   topRight: Radius.circular(10)),
-      color: primaryGreen)
+              color: primaryGreen)
           : BoxDecoration(
               borderRadius: BorderRadius.only(
                   bottomRight: Radius.circular(15),
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15)),
-      color: Colors.grey),
+              color: Colors.grey),
       margin: isMe
           ? EdgeInsets.only(top: 8.0, bottom: 8.0, left: 80.0)
-          : EdgeInsets.only(
-              top: 8.0,
-              bottom: 8.0,
-              right: 80.0
-            ),
+          : EdgeInsets.only(top: 8.0, bottom: 8.0, right: 80.0),
       padding: EdgeInsets.symmetric(vertical: 13, horizontal: 18),
       //width: MediaQuery.of(context).size.width * 0.75,
-      child:
-
-          Text(
-            message['text'] != null ? message['text']:'',
-            style: TextStyle(
-                color: Colors.blueGrey,
-                fontWeight: FontWeight.w600,
-                fontSize: 16.0),
-          ),
-
+      child: Text(
+        message['message'] != null ? message['message'] : '',
+        style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w200,
+            fontSize: 14.0,
+            fontFamily: 'genuine'),
+      ),
     );
 
-   if(isMe){
-      return  Row(
+    if (isMe) {
+      return Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Text(
-            message['time'] != null ? message['time']:'',
-            ),
+            message['time'] != null ? message['time'] : '',
+          ),
           myMessage,
         ],
       );
     }
     return Container(
       //margin: EdgeInsets.only(right: 45),
-      width: MediaQuery.of(context).size.width*0.7,
+      width: MediaQuery.of(context).size.width * 0.7,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           myMessage,
           Text(
-            message['time'] != null ? message['time'] :'',
-            ),
+            message['time'] != null ? message['time'] : '',
+          ),
         ],
       ),
     );
@@ -130,46 +121,47 @@ class _ChatsState extends State<Chats> {
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
       appBar: AppBar(),
-        backgroundColor: Colors.white,
-
-        body: Column(
+      backgroundColor: Colors.white,
+      body: Column(
         children: <Widget>[
-
           Expanded(
-              child:
-                  Container(
-                    color: Colors.white.withOpacity(0.5),
-                    child: ClipRRect(
-                      child: StreamBuilder(
-                        stream: Firestore.instance.collection('messages').snapshots(),
-                        builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        
-                          return snapshot.hasData ? ListView.builder(
-
-                              itemCount: snapshot.data.documents.length,
-                              itemBuilder: (BuildContext ctx, int index) {
-                                final  message = snapshot.data.documents[index];
-                                final bool isMe = message['sender'] == authNotifier.user.email || message['reciever'] == authNotifier.user.email;
-                                //final chat= messages[index]; //message.sender.id == me.id || message.reciever.id == me.id ?;
-                                return loadMessage(message, isMe);
-
-                              }) :
-                              Column(
-                                children: [
-                                  IconButton(
-                                    onPressed: null,
-                                    icon: Icon(Icons.hourglass_empty),
-                                  ),
-                                  Text('No Messages'),
-                                ],
-                              );
-                        },
-                      ),
-                    ),
-                  ),
+            child: Container(
+              color: Colors.white.withOpacity(0.5),
+              child: ClipRRect(
+                child: StreamBuilder(
+                  stream: Firestore.instance.collection('messages').snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    return snapshot.hasData
+                        ? ListView.builder(
+                            itemCount: snapshot.data.documents.length,
+                            itemBuilder: (BuildContext ctx, int index) {
+                              final message = snapshot.data.documents[index];
+                              // print(message);
+                              // authNotifier.user.email
+                              final bool isMe = message['sender'] ==
+                                      authNotifier.user.email ||
+                                  message['reciever'] ==
+                                      authNotifier.user.email;
+                              //final chat= messages[index]; //message.sender.id == me.id || message.reciever.id == me.id ?;
+                              return loadMessage(message, isMe);
+                            })
+                        : Column(
+                            children: [
+                              IconButton(
+                                onPressed: null,
+                                icon: Icon(Icons.hourglass_empty),
+                              ),
+                              Text('No Messages'),
+                            ],
+                          );
+                  },
+                ),
+              ),
+            ),
           ),
           Container(
             margin: EdgeInsets.all(15.0),
@@ -178,47 +170,54 @@ class _ChatsState extends State<Chats> {
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    decoration:BoxDecoration(
+                    decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         color: Colors.grey,
                         boxShadow: shadowList),
                     child: Row(
                       children: <Widget>[
-                        IconButton(icon: Icon(Icons.camera_alt), onPressed: () {},),
+                        IconButton(
+                          icon: Icon(Icons.camera_alt),
+                          onPressed: () {},
+                        ),
                         Expanded(
                             child: TextField(
-                              decoration: InputDecoration(
-                                  hintText: "type something",
-                                  border: InputBorder.none
-                              ),
-                            )),
+                          decoration: InputDecoration(
+                              hintText: "type something",
+                              border: InputBorder.none),
+                        )),
                         //IconButton(icon: Icon(Icons.camera_alt), onPressed: () {},),
-                        IconButton(icon: Icon(Icons.attach_file), onPressed: () {},),
+                        IconButton(
+                          icon: Icon(Icons.attach_file),
+                          onPressed: () {},
+                        ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(width: 15,),
+                SizedBox(
+                  width: 15,
+                ),
                 Container(
                   height: 48,
                   padding: EdgeInsets.all(15),
                   decoration: BoxDecoration(
                       color: primaryGreen,
-                      borderRadius: BorderRadius.all(Radius.circular(10))
-                  ),
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
                   child: InkWell(
-                    child: Icon(Icons.send,
-                      color: Colors.white
-                      ,),
+                    child: Icon(
+                      Icons.send,
+                      color: Colors.white,
+                    ),
                   ),
                 )
               ],
             ),
           )
         ],
-        ),
+      ),
 
-        /*GestureDetector(
+      /*GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
           },
@@ -259,6 +258,6 @@ class _ChatsState extends State<Chats> {
             ],
           ),
         )*/
-        );
+    );
   }
 }
