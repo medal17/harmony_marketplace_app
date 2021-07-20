@@ -1,28 +1,44 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:trainapp/notifier/Auth_Notifier.dart';
-// import 'package:url_launcher/link.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:trainapp/config%20file.dart';
+import 'package:trainapp/drawerScreen.dart';
 //import 'package:trainapp/logInScreen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:trainapp/model/modelData.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trainapp/singleProduct.dart';
 import 'package:trainapp/filterOptions.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:intl/intl.dart';
-//import 'package:cached_network_image/cached_network_image.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
 
-class HomeScreen extends StatefulWidget {
+import 'notifier/Auth_Notifier.dart';
+
+class MyProduct extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _MyProductState createState() => _MyProductState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+Future<void> _launcher(String value) async {
+  // const url = value;
+  if (await canLaunch(value)) {
+    await launch(value);
+  } else {
+    throw 'Could not Call $value';
+  }
+}
+
+final snackBar = SnackBar(
+  content: Text('Delete! Confirm you wish to delete!'),
+  action: SnackBarAction(
+    label: 'Undo',
+    onPressed: () {
+      // Some code to undo the change.
+    },
+  ),
+);
+
+class _MyProductState extends State<MyProduct> {
   //ViewProduct viewProduct;
   int selectedItem = 0;
   bool isMinimized = false;
@@ -30,206 +46,152 @@ class _HomeScreenState extends State<HomeScreen> {
   double yOffset = 0;
   double scaleFactor = 1;
   bool showNumber = false;
-  StorageReference storageReference = FirebaseStorage.instance.ref();
 
-  Future<void> _makePhoneCall(String url) async {
-    if (await canLaunch('tel:${url}')) {
-      await launch('tel:${url}');
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  final format = new NumberFormat("#,##0", "en_US");
-// Future<void>? _launched;
   @override
   Widget build(BuildContext context) {
-    // const String toLaunch = '08055848342';
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
-    Locale locale = Localizations.localeOf(context);
-    return AnimatedContainer(
-      decoration: BoxDecoration(
-          boxShadow: shadowListBlack,
-          color: Colors.grey[200],
-          borderRadius:
-              BorderRadius.all(Radius.circular(isMinimized ? 18 : 0))),
-      transform: Matrix4.translationValues(xOffset, yOffset, 0)
-        ..scale(scaleFactor),
-      duration: Duration(milliseconds: 250),
-      child: Stack(children: <Widget>[
-        Container(
-          margin: EdgeInsets.symmetric(
-            vertical: 22,
-          ),
+    return Scaffold(
+      body: AnimatedContainer(
+        decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius:
+                BorderRadius.all(Radius.circular(isMinimized ? 18 : 0))),
+        transform: Matrix4.translationValues(xOffset, yOffset, 0)
+          ..scale(scaleFactor),
+        duration: Duration(milliseconds: 250),
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 22, horizontal: 20),
           child: Column(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    isMinimized
-                        ? IconButton(
-                            icon: Icon(Icons.close),
-                            onPressed: () {
-                              setState(() {
-                                isMinimized = false;
-                                xOffset = 0;
-                                yOffset = 0;
-                                scaleFactor = 1;
-                              });
-                            },
-                          )
-                        : Container(
-                            margin: EdgeInsets.only(left: 5),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.menu,
-                                size: 25,
-                                color: primaryGreen,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  isMinimized = true;
-                                  xOffset = 200;
-                                  yOffset = 120;
-                                  scaleFactor = 0.7;
-                                });
-                              },
-                            ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  isMinimized
+                      ? IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () {
+                            setState(() {
+                              isMinimized = false;
+                              xOffset = 0;
+                              yOffset = 0;
+                              scaleFactor = 1;
+                            });
+                          },
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.arrow_back_ios_rounded,
+                            size: 25,
+                            color: primaryGreen,
                           ),
-                    Column(
-                      children: <Widget>[
-                        Text('Location'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Icon(
-                              Icons.add_location,
-                              color: primaryGreen,
-                            ),
-                            Text(
-                              'Ukraine',
-                              style: TextStyle(
-                                  fontFamily: 'Genuine', fontSize: 18),
-                            ),
-                          ],
+                          onPressed: () {
+                            setState(() {
+                              DrawerScreen();
+                              isMinimized = true;
+                              xOffset = 200;
+                              yOffset = 120;
+                              scaleFactor = 0.7;
+                            });
+                          },
                         ),
-                      ],
-                    ),
-                    CircleAvatar(),
-                  ],
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      // Icon(
+                      //   Icons.favorite_border,
+                      //   color: primaryGreen,
+                      // ),
+                      // SizedBox(
+                      //   width: 5,
+                      // ),
+                      Text(
+                        'My Products',
+                        style: TextStyle(fontFamily: 'Genuine', fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  CircleAvatar(),
+                ],
               ),
               Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(18))),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                margin: EdgeInsets.symmetric(vertical: 7, horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Icon(Icons.search),
+                    // Icon(Icons.search),
                     Text('Search for products'),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (_) => Filters()));
                       },
-                      child: Icon(
-                        Icons.filter_list,
-                      ),
+                      child: Icon(Icons.search),
                     )
                   ],
                 ),
               ),
-              Container(
-                height: 80,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        child: Column(
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedItem = index;
-                                });
-                              },
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: index == selectedItem
-                                            ? primaryGreen
-                                            : Colors.white,
-                                        boxShadow: shadowList,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(11),
-                                        )),
-                                    height: 45,
-                                    width: 45,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 2),
-                                    margin: EdgeInsets.symmetric(horizontal: 8),
-                                    child: categories[index],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Container(
-                                    child: Text(
-                                      menuTag[index].toString(),
-                                      style: TextStyle(
-                                          color: index == selectedItem
-                                              ? primaryGreen
-                                              : Colors.blueGrey,
-                                          fontWeight: FontWeight.w200,
-                                          fontSize: 12,
-                                          fontFamily: 'Genuine'),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    }),
-              ),
               Expanded(
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white,
                   child: StreamBuilder(
-                      stream:
-                          Firestore.instance.collection('product').snapshots(),
+                      stream: Firestore.instance
+                          .collection('product')
+                          .where('sellerId', isEqualTo: authNotifier.user.email)
+                          .snapshots(),
                       builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return CircularProgressIndicator();
-                        }
-                        return Container(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
-                          child: ListView.builder(
-                            itemCount: snapshot.data.documents.length,
-                            itemBuilder: ((context, index) {
-                              final product = snapshot.data.documents[index];
-                              // print(product['phone']);
+                        print(Firestore.instance
+                            .collection('product')
+                            .snapshots());
+                        return ListView.builder(
+                          itemCount: snapshot.data.documents.length,
+                          itemBuilder: ((context, index) {
+                            final product = snapshot.data.documents[index];
 
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context, MaterialPageRoute(
-                                    builder: (_) {
-                                      return SingleProduct(
-                                        product: product,
-                                      );
-                                    },
-                                  ));
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (_) {
+                                    return SingleProduct(
+                                      product: product,
+                                    );
+                                  },
+                                ));
+                              },
+                              child: Dismissible(
+                                onDismissed: (direction) {
+                                  Scaffold.of(context).showSnackBar(
+                                      SnackBar(content: Text('deleted')));
                                 },
+                                background: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(
+                                        Icons.delete_outline_outlined,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                      Icon(
+                                        Icons.delete_outline_outlined,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      // boxShadow: shadowList,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15))),
+                                ),
+                                key: Key(product['productName']),
                                 child: Container(
                                   margin: EdgeInsets.only(bottom: 8),
                                   child: Container(
@@ -266,13 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 imageUrl: product['picture1'],
                                                 fit: BoxFit.cover,
                                                 placeholder: (context, url) =>
-                                                    Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 20,
-                                                                vertical: 15),
-                                                        child:
-                                                            CircularProgressIndicator()),
+                                                    CircularProgressIndicator(),
                                                 height: MediaQuery.of(context)
                                                         .size
                                                         .height *
@@ -331,6 +287,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ],
                                               ),
                                             ),
+                                            // SizedBox(
+                                            //   height: 2,
+                                            // ),
                                             Container(
                                               width: MediaQuery.of(context)
                                                       .size
@@ -342,22 +301,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 child: Row(
                                                   //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                   children: <Widget>[
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          bottom: 3),
-                                                      child: Text(
-                                                        'NGN ',
-                                                        style: TextStyle(
-                                                            fontSize: 11),
-                                                      ),
-                                                    ),
                                                     Expanded(
                                                       flex: 3,
                                                       child: Align(
                                                           alignment: Alignment
                                                               .bottomLeft,
                                                           child: Text(
-                                                            '${format.format(int.parse(product['price']))}',
+                                                            product['price'],
                                                             style: TextStyle(
                                                                 fontFamily:
                                                                     'Genuine',
@@ -371,13 +321,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       child: IconButton(
                                                         padding:
                                                             EdgeInsets.all(3),
-                                                        icon: Icon(Icons
-                                                            .message_rounded),
+                                                        icon: Icon(
+                                                            Icons.edit_rounded),
                                                         iconSize: 20,
                                                         // alignment: Alignment.center,
                                                         color: primaryGreen,
                                                         onPressed: () {
-                                                          _makePhoneCall(
+                                                          _launcher(
                                                               product['phone']
                                                                   .toString());
                                                         },
@@ -387,13 +337,49 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       child: IconButton(
                                                         padding:
                                                             EdgeInsets.all(3),
-                                                        icon: Icon(Icons.call),
+                                                        icon: Icon(Icons
+                                                            .delete_sweep_rounded),
                                                         iconSize: 20,
                                                         // alignment: Alignment.center,
                                                         color: primaryGreen,
                                                         onPressed: () {
-                                                          _makePhoneCall(
-                                                              product['phone']);
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              action:
+                                                                  SnackBarAction(
+                                                                label: 'Action',
+                                                                onPressed: () {
+                                                                  // Code to execute.
+                                                                },
+                                                              ),
+                                                              content: const Text(
+                                                                  'Confirm you wish to Delete'),
+                                                              duration:
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          1500),
+                                                              width:
+                                                                  280.0, // Width of the SnackBar.
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                horizontal:
+                                                                    8.0, // Inner padding for SnackBar content.
+                                                              ),
+                                                              behavior:
+                                                                  SnackBarBehavior
+                                                                      .floating,
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10.0),
+                                                              ),
+                                                            ),
+                                                          );
                                                         },
                                                       ),
                                                     )
@@ -407,26 +393,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-                              );
-                            }),
-                          ),
+                              ),
+                            );
+                          }),
                         );
                       }),
                 ),
-              ),
+              )
             ],
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(right: 10, bottom: 5),
-          alignment: Alignment.bottomRight,
-          child: FloatingActionButton(
-            backgroundColor: primaryGreen,
-            onPressed: () {},
-            child: Icon(Icons.notifications),
-          ),
-        )
-      ]),
+      ),
     );
   }
 }

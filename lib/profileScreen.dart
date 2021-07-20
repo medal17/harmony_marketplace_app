@@ -26,59 +26,89 @@ class _ProfileState extends State<Profile> {
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();*/
 
-  String name = '';
+  String name;
   String number;
   String password;
   String address;
+  String id;
+  var data;
 
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
-    print(authNotifier.user);
+    // print(authNotifier.user.uid);
     Stream shot = Firestore.instance.collection('users').document(
         // 'iyandaadeshina@gmail.com'
         authNotifier.user.uid).snapshots();
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back_ios),
-          ),
-          title: Text('My Profile'),
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (_)=>Profile))
-                }),
-            Text(
-              'Edit',
-              textAlign: TextAlign.center,
+            toolbarHeight: 40,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios_rounded,
+                size: 20,
+              ),
             ),
-          ],
-          backgroundColor: Colors.blueGrey.withOpacity(0.02),
-        ),
+            title: Text(
+              'My Profile',
+              style: TextStyle(fontSize: 16, color: primaryGreen),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => ProfileForm(
+                                      user: name,
+                                      address: address,
+                                      phone: number,
+                                      id: id,
+                                    )));
+                      }),
+                  Text(
+                    'Edit',
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  )
+                ],
+              )
+            ],
+            backgroundColor: primaryGreen.withOpacity(0.4)),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
             child: StreamBuilder(
                 stream: shot,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    return Text('loading');
+                    return Center(
+                        child: Column(
+                      children: [CircularProgressIndicator(), Text('loading')],
+                    ));
                   }
                   // print(snapshot.data);
-
+                  // setState(() {
+                  //   data = snapshot.data;
+                  // });
                   var userDocument = snapshot.data;
-                  name = userDocument['Name'];
+                  name = userDocument['Name'].toString();
                   number = userDocument['Phone'];
                   address = userDocument['Location'];
                   password = userDocument['Password'];
+                  id = authNotifier.user.uid;
 
                   return Container(
                       child: Column(
@@ -135,23 +165,27 @@ class _ProfileState extends State<Profile> {
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.blueGrey.withOpacity(0.1)),
                                   child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: <Widget>[
                                       Icon(
                                         Icons.location_on,
                                         size: 20,
                                       ),
                                       Text(
-                                        userDocument['Location'],
+                                        userDocument['Location'] +
+                                            ',  ' +
+                                            'Lagos',
                                         style: TextStyle(
                                             fontFamily: 'Montserrat',
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500),
                                       ),
-                                      Text(' Kwara State.',
-                                          style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w500)),
+                                      // Text(' Kwara State.',
+                                      //     style: TextStyle(
+                                      //         fontFamily: 'Montserrat',
+                                      //         fontSize: 13,
+                                      //         fontWeight: FontWeight.w500)),
                                       SizedBox(
                                         height: 15,
                                       ),
@@ -268,64 +302,40 @@ class _ProfileState extends State<Profile> {
                           ),*/
 
                         SizedBox(height: 10),
-                        edit == 1
-                            ? Container(
-                                height: 30,
-                                width: 200,
-                                color: Colors.red,
-                                child: ProfileForm(
-                                    'Email', userDocument['Email'], shot))
-                            : Container(
-                                //width:MediaQuery.of(context).size.width*0.9,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.7,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color:
-                                              Colors.blueGrey.withOpacity(0.1)),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 5),
-                                      margin: EdgeInsets.only(
-                                          left: 30, right: 5, bottom: 20),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(
-                                            "Email",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontFamily: 'genuine',
-                                                fontWeight: FontWeight.w200,
-                                                color: Colors.blueGrey[700]),
-                                          ),
-                                          Text(
-                                            userDocument['Email'],
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontFamily: 'genuine',
-                                                fontWeight: FontWeight.w200,
-                                                color: primaryGreen),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.edit),
-                                      color: Colors.orangeAccent,
-                                      onPressed: () {
-                                        setState(() {
-                                          edit = 1;
-                                        });
-                                      },
-                                    )
-                                  ],
+                        Container(
+                          //width:MediaQuery.of(context).size.width*0.9,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.85,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.blueGrey.withOpacity(0.1)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 5),
+                            margin:
+                                EdgeInsets.only(left: 30, right: 5, bottom: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Email",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'genuine',
+                                      fontWeight: FontWeight.w200,
+                                      color: Colors.blueGrey[700]),
                                 ),
-                              ),
+                                Text(
+                                  userDocument['Email'],
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'genuine',
+                                      fontWeight: FontWeight.w200,
+                                      color: primaryGreen),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                         Container(
                           width: MediaQuery.of(context).size.width * 0.9,
                           decoration: BoxDecoration(
@@ -388,37 +398,37 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.blueGrey.withOpacity(0.1)),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                          margin:
-                              EdgeInsets.only(left: 30, right: 30, bottom: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "Password",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'genuine',
-                                    fontWeight: FontWeight.w200,
-                                    color: Colors.blueGrey[700]),
-                              ),
-                              Text(
-                                userDocument['Password'],
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: 'genuine',
-                                    fontWeight: FontWeight.w200,
-                                    color: primaryGreen),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // Container(
+                        //   width: MediaQuery.of(context).size.width * 0.9,
+                        //   decoration: BoxDecoration(
+                        //       borderRadius: BorderRadius.circular(10),
+                        //       color: Colors.blueGrey.withOpacity(0.1)),
+                        //   padding:
+                        //       EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        //   margin:
+                        //       EdgeInsets.only(left: 30, right: 30, bottom: 20),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: <Widget>[
+                        //       Text(
+                        //         "Password",
+                        //         style: TextStyle(
+                        //             fontSize: 14,
+                        //             fontFamily: 'genuine',
+                        //             fontWeight: FontWeight.w200,
+                        //             color: Colors.blueGrey[700]),
+                        //       ),
+                        //       Text(
+                        //         userDocument['Password'],
+                        //         style: TextStyle(
+                        //             fontSize: 16,
+                        //             fontFamily: 'genuine',
+                        //             fontWeight: FontWeight.w200,
+                        //             color: primaryGreen),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         Container(
                           width: MediaQuery.of(context).size.width * 0.9,
                           decoration: BoxDecoration(

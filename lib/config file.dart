@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:trainapp/myProduct.dart';
 import 'package:trainapp/profileScreen.dart';
 import 'package:trainapp/sellProduct.dart';
 import 'package:trainapp/wishList.dart';
@@ -86,6 +87,9 @@ List<Map> conditionList = [
 
 navigate(BuildContext context, String link) {
   switch (link) {
+    case "My Products":
+      Navigator.push(context, MaterialPageRoute(builder: (_) => MyProduct()));
+      break;
     case "Profile":
       Navigator.push(context, MaterialPageRoute(builder: (_) => Profile()));
       break;

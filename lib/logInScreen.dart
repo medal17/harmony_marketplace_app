@@ -43,7 +43,7 @@ class _LogInScreenState extends State<LogInScreen> {
     return Scaffold(
         body: Form(
       key: _formKey,
-      autovalidate: true,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: SingleChildScrollView(
         child: Container(
           alignment: Alignment.center,

@@ -24,6 +24,7 @@ login(LocalUser user, AuthNotifier authNotifier) async {
     print(result.user);
     print("Log in: $firebaseUser");
     authNotifier.setUser(firebaseUser);
+    authNotifier.setSignInStatus(false);
   }
 }
 

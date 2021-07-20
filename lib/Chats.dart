@@ -77,7 +77,7 @@ class _ChatsState extends State<Chats> {
                   bottomRight: Radius.circular(15),
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15)),
-              color: Colors.grey),
+              color: Colors.grey.withOpacity(0.6)),
       margin: isMe
           ? EdgeInsets.only(top: 8.0, bottom: 8.0, left: 80.0)
           : EdgeInsets.only(top: 8.0, bottom: 8.0, right: 80.0),
@@ -86,7 +86,7 @@ class _ChatsState extends State<Chats> {
       child: Text(
         message['message'] != null ? message['message'] : '',
         style: TextStyle(
-            color: Colors.white,
+            color: isMe ? Colors.white : primaryGreen,
             fontWeight: FontWeight.w200,
             fontSize: 14.0,
             fontFamily: 'genuine'),
@@ -133,7 +133,10 @@ class _ChatsState extends State<Chats> {
               color: Colors.white.withOpacity(0.5),
               child: ClipRRect(
                 child: StreamBuilder(
-                  stream: Firestore.instance.collection('messages').snapshots(),
+                  stream: Firestore.instance
+                      .collection('messages')
+                      .where('reciever', isEqualTo: authNotifier.user.email)
+                      .snapshots(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     return snapshot.hasData
                         ? ListView.builder(
@@ -142,10 +145,11 @@ class _ChatsState extends State<Chats> {
                               final message = snapshot.data.documents[index];
                               // print(message);
                               // authNotifier.user.email
-                              final bool isMe = message['sender'] ==
-                                      authNotifier.user.email ||
-                                  message['reciever'] ==
-                                      authNotifier.user.email;
+                              final bool isMe =
+                                  message['sender'] == authNotifier.user.email;
+                              //     ||
+                              // message['reciever'] ==
+                              //     authNotifier.user.email;
                               //final chat= messages[index]; //message.sender.id == me.id || message.reciever.id == me.id ?;
                               return loadMessage(message, isMe);
                             })
@@ -172,23 +176,29 @@ class _ChatsState extends State<Chats> {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: Colors.grey,
+                        color: Colors.grey.withOpacity(0.3),
                         boxShadow: shadowList),
                     child: Row(
                       children: <Widget>[
                         IconButton(
-                          icon: Icon(Icons.camera_alt),
+                          icon: Icon(
+                            Icons.camera_alt,
+                            size: 18,
+                          ),
                           onPressed: () {},
                         ),
                         Expanded(
                             child: TextField(
                           decoration: InputDecoration(
-                              hintText: "type something",
+                              hintText: "Type something",
                               border: InputBorder.none),
                         )),
                         //IconButton(icon: Icon(Icons.camera_alt), onPressed: () {},),
                         IconButton(
-                          icon: Icon(Icons.attach_file),
+                          icon: Icon(
+                            Icons.attach_file,
+                            size: 20,
+                          ),
                           onPressed: () {},
                         ),
                       ],

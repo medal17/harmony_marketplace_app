@@ -1,19 +1,27 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trainapp/api/Firebase_Api.dart';
+import 'config file.dart';
 
 import 'notifier/Auth_Notifier.dart';
 //import 'package:trainapp/model/userModel.dart';
 
 class ProfileForm extends StatelessWidget {
-  final String title;
-  final initialValue;
-  final shot;
-  ProfileForm(this.title, this.initialValue, this.shot);
+  String user;
+  String address;
+  String city;
+  String phone;
+  String id;
+  ProfileForm({this.user, this.address, this.city, this.phone, this.id});
+  // final string location;
+  // final shot;
+  // ProfileForm();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  _submitForm(){
-    if(!_formKey.currentState.validate()){
+  _submitForm() {
+    if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
@@ -21,88 +29,326 @@ class ProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context, listen: false);
+    TextEditingController userController = TextEditingController(text: user);
+    TextEditingController addressController =
+        TextEditingController(text: address);
+    TextEditingController cityController = TextEditingController(text: address);
+    TextEditingController phoneController = TextEditingController(text: phone);
+    // shot.toString();
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
+
+    updateProfile() {
+      Firestore.instance.collection('users').document(id).updateData({
+        "Name": userController.text,
+        "Location": addressController.text,
+        "Phone": phoneController.text
+      });
+    }
+
+    // print(id);
     //var newUser = NewUser();
-    return Row(
-      children: [
-        Container(
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.topLeft,
-                margin: EdgeInsets.only(top:10, left: 35),
-                child: Text(title,
-                    style: TextStyle(
-                      color: Colors.blueGrey,
-                      fontSize: 13,
-                      fontFamily: 'genuine',
-                      fontWeight: FontWeight.w200,
-                       
-                    )),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.065,
-                margin: EdgeInsets.only( left: 30, right: 30),
-                padding: EdgeInsets.only(bottom: 10, left: 7),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.grey,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextFormField(
-                  initialValue: initialValue,
-                  decoration: InputDecoration(
-                    //labelText: 'hi',
-                    border: InputBorder.none,
-                  ),
-                  onChanged: (String value){
-                    print(value);
-                      /*switch(title){
-                        case "name": newUser.name = value;
-                        break;
-                        case "email": newUser.email = value;
-                        break;
-                        case "Phone number": newUser.phone = value;
-                        break;
-                        case "Password": newUser.password = value;
-                        break;
-                        case "Address": newUser.location = value;
-                        break;
-                      }*/
-
-
-                  },
-                  //controller: controller,
-                  onSaved: (String value) {
-                    //product.productName = value;
-                    Firestore.instance.collection('users').document(authNotifier.user.uid).setData({'$title':'value'});
-                    
-                     print(value);
-                  },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return '$title Cannot bxe empty';
-                      
-                    }
-
-                    if (value==initialValue) {
-                      return 'Nothing has changed';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-            ],
-          ),
+    // Stream shot = Firestore.instance.collection('users').document(
+    //     // 'iyandaadeshina@gmail.com'
+    //     authNotifier.user.uid).snapshots();
+    // print(shot);
+    return Scaffold(
+      backgroundColor: Colors.blueGrey[100],
+      appBar: AppBar(
+        toolbarHeight: 50,
+        backgroundColor: primaryGreen.withOpacity(0.9),
+        title: Text(
+          'Edit Profile',
+          style: TextStyle(fontSize: 17),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_rounded),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 1, horizontal: 25),
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                //color: primaryGreen,
+              ),
+              child: ClipOval(
+                  child: authNotifier.user.photoUrl != null
+                      ? CachedNetworkImage(
+                          height: 100,
+                          width: 100,
+                          imageUrl: authNotifier.user.photoUrl,
+                        )
+                      : Icon(
+                          Icons.account_circle,
+                          size: 90,
+                          color: primaryGreen,
+                        )),
+            ),
+            Form(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: SingleChildScrollView(
+                child: Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * .6,
+                  // color: Colors.blueGrey[100],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 40),
+                      // Padding(
+                      //   padding: EdgeInsets.only(bottom: 13),
+                      //   child: Text(
+                      //     'Edit Profile',
+                      //     style: TextStyle(
+                      //         fontFamily: 'genuine',
+                      //         fontWeight: FontWeight.w200,
+                      //         fontSize: 25,
+                      //         color: primaryGreen),
+                      //   ),
+                      // ),
+                      // Text(authNotifier.signInMessage.toString(),
+                      //     style: TextStyle(
+                      //         fontFamily: 'genuine',
+                      //         fontWeight: FontWeight.w200,
+                      //         color: Colors.red)),
+                      Container(
+                        height: 70,
+                        padding: EdgeInsets.symmetric(vertical: 3),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Container(
+                              height: 52,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.white,
+                                  ),
+                                  color: Colors.white.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(7)),
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: TextFormField(
+                                  //obscureText: true,
+                                  //keyboardType: Keyboar,
+                                  controller: userController,
+                                  // initialValue: user.toString(),
+                                  decoration: InputDecoration(
+                                    labelText: 'Username',
+                                    labelStyle: TextStyle(),
+                                    // focusedBorder: InputBorder.none,
+                                    border: InputBorder.none,
+                                  ),
+                                  validator: (String value) {
+                                    if (value.isEmpty) {
+                                      return 'Input your Username';
+                                    }
+                                    if (value.length < 5) {
+                                      return 'Username must be between 5 and 12';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (String value) {
+                                    // _user.email = value;
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 70,
+                        // padding: EdgeInsets.only(bottom: 5),
+                        padding: EdgeInsets.symmetric(vertical: 3),
 
-        Container(child: IconButton(icon: Icon(Icons.check), onPressed: (){       
-          _submitForm();
-        }),)
-      ],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.white,
+                                  ),
+                                  color: Colors.white.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(7)),
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: TextFormField(
+                                  style: TextStyle(fontSize: 14),
+                                  // initialValue: address,
+                                  controller: addressController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Address',
+                                    focusedBorder: InputBorder.none,
+                                    border: InputBorder.none,
+                                  ),
+                                  // validator: (String value) {
+                                  //   if (value.isEmpty) {
+                                  //     return 'Input your Password';
+                                  //   }
+                                  //   if (value.length < 5 || value.length > 12) {
+                                  //     return 'Password must be between 5 and 12';
+                                  //   }
+                                  //   return null;
+                                  // },
+                                  onSaved: (String value) {
+                                    // _user.password = value;
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 70,
+                        // padding: EdgeInsets.only(bottom: 5),
+                        padding: EdgeInsets.symmetric(vertical: 3),
+
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              height: 52,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.white,
+                                  ),
+                                  color: Colors.white.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(7)),
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: TextFormField(
+                                  style: TextStyle(fontSize: 14),
+                                  // initialValue: address,
+                                  controller: cityController,
+                                  decoration: InputDecoration(
+                                    labelText: 'City',
+                                    focusedBorder: InputBorder.none,
+                                    border: InputBorder.none,
+                                  ),
+                                  // validator: (String value) {
+                                  //   if (value.isEmpty) {
+                                  //     return 'Input your Password';
+                                  //   }
+                                  //   if (value.length < 5 || value.length > 12) {
+                                  //     return 'Password must be between 5 and 12';
+                                  //   }
+                                  //   return null;
+                                  // },
+                                  onSaved: (String value) {
+                                    // _user.password = value;
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 70,
+                        // padding: EdgeInsets.only(bottom: 5),
+                        padding: EdgeInsets.symmetric(vertical: 3),
+
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.white,
+                                  ),
+                                  color: Colors.white.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(7)),
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: TextFormField(
+                                  style: TextStyle(fontSize: 14),
+                                  // initialValue: phone,
+                                  controller: phoneController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Phone',
+                                    focusedBorder: InputBorder.none,
+                                    border: InputBorder.none,
+                                  ),
+                                  // validator: (String value) {
+                                  //   if (value.isEmpty) {
+                                  //     return 'Input your Password';
+                                  //   }
+                                  //   if (value.length < 5 || value.length > 12) {
+                                  //     return 'Password must be between 5 and 12';
+                                  //   }
+                                  //   return null;
+                                  // },
+                                  onSaved: (String value) {
+                                    // _user.password = value;
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          if (!authNotifier.signInStatus) {
+                            updateProfile();
+                            authNotifier.setSignInStatus(true);
+                          }
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(top: 5),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 90),
+                          child: authNotifier.signInStatus
+                              ? SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  'Submit',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'genuine',
+                                      fontSize: 20),
+                                ),
+                          decoration: BoxDecoration(
+                              color: primaryGreen,
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
