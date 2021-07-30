@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:trainapp/config%20file.dart';
+import 'package:trainapp/notifier/Auth_Notifier.dart';
+import 'package:provider/provider.dart';
 //import 'package:trainapp/model/modelData.dart';
 
 class SingleProduct extends StatelessWidget {
@@ -13,6 +15,9 @@ class SingleProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
+    print(authNotifier.user.email);
     return Scaffold(
         body: Stack(
       children: <Widget>[
@@ -150,66 +155,117 @@ class SingleProduct extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.blueGrey[100],
                   borderRadius: BorderRadius.circular(15)),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                        color: primaryGreen,
-                        borderRadius: BorderRadius.circular(20)),
-                    margin: EdgeInsets.symmetric(horizontal: 5),
-                    height: 50,
-                    width: 60,
-                    child: Icon(
-                      Icons.favorite_border,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: primaryGreen,
-                          borderRadius: BorderRadius.circular(17)),
-                      margin: EdgeInsets.symmetric(horizontal: 13),
-                      height: 50,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.chat,
+              child: authNotifier.user.email == product['sellerId']
+                  ? Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.red[700],
+                                borderRadius: BorderRadius.circular(10)),
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            height: 50,
+                            width: 60,
+                            child: Center(
+                              child: Text(
+                                'Delete',
+                                style: TextStyle(
+                                    fontFamily: 'genuine',
+                                    fontWeight: FontWeight.w200,
+                                    fontSize: 17,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Colors.yellow[900],
+                                borderRadius: BorderRadius.circular(10)),
+                            margin: EdgeInsets.symmetric(horizontal: 13),
+                            height: 50,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // SizedBox(
+                                //   width: 10,
+                                // ),
+                                Text(
+                                  'Sold',
+                                  style: TextStyle(
+                                      fontFamily: 'genuine',
+                                      fontWeight: FontWeight.w200,
+                                      fontSize: 17,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                              color: primaryGreen,
+                              borderRadius: BorderRadius.circular(10)),
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          height: 50,
+                          width: 60,
+                          child: Icon(
+                            Icons.favorite_border,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: primaryGreen,
+                                borderRadius: BorderRadius.circular(17)),
+                            margin: EdgeInsets.symmetric(horizontal: 13),
+                            height: 50,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.chat,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Show Interest',
+                                  style: TextStyle(
+                                      fontFamily: 'genuine',
+                                      fontWeight: FontWeight.w200,
+                                      fontSize: 17,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: primaryGreen,
+                              borderRadius: BorderRadius.circular(20)),
+                          margin: EdgeInsets.symmetric(horizontal: 5),
+                          height: 50,
+                          width: 60,
+                          child: Icon(
+                            Icons.call,
                             color: Colors.white,
                             size: 20,
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Show Interest',
-                            style: TextStyle(
-                                fontFamily: 'genuine',
-                                fontWeight: FontWeight.w200,
-                                fontSize: 17,
-                                color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: primaryGreen,
-                        borderRadius: BorderRadius.circular(20)),
-                    margin: EdgeInsets.symmetric(horizontal: 5),
-                    height: 50,
-                    width: 60,
-                    child: Icon(
-                      Icons.call,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                ],
-              )),
+                        ),
+                      ],
+                    )),
         )
       ],
     ));
