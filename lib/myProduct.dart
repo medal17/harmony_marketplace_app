@@ -6,6 +6,7 @@ import 'package:trainapp/config%20file.dart';
 import 'package:trainapp/drawerScreen.dart';
 //import 'package:trainapp/logInScreen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:trainapp/editMyProduct.dart';
 import 'package:trainapp/model/modelData.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,9 +47,10 @@ class _MyProductState extends State<MyProduct> {
   double yOffset = 0;
   double scaleFactor = 1;
   bool showNumber = false;
-
+  
   @override
   Widget build(BuildContext context) {
+
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
@@ -61,8 +63,9 @@ class _MyProductState extends State<MyProduct> {
           ..scale(scaleFactor),
         duration: Duration(milliseconds: 250),
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 22, horizontal: 20),
+          margin: EdgeInsets.symmetric(vertical: 22, horizontal: 0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,27 +120,29 @@ class _MyProductState extends State<MyProduct> {
               Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(18))),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 margin: EdgeInsets.symmetric(vertical: 7, horizontal: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     // Icon(Icons.search),
-                    Text('Search for products'),
+                    Text('Search for products',style: TextStyle(fontSize: 12),),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (_) => Filters()));
                       },
-                      child: Icon(Icons.search),
+                      child: Icon(Icons.search,size: 23,),
                     )
                   ],
                 ),
               ),
               Expanded(
+
                 child: Container(
                   color: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   child: StreamBuilder(
                       stream: Firestore.instance
                           .collection('product')
@@ -151,7 +156,7 @@ class _MyProductState extends State<MyProduct> {
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: ((context, index) {
                             final product = snapshot.data.documents[index];
-
+                            // print(product);
                             return GestureDetector(
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(
@@ -169,6 +174,7 @@ class _MyProductState extends State<MyProduct> {
                                 },
                                 background: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 15),
+                                  // margin: EdgeInsets.symmetric(horizontal: 10),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -307,11 +313,12 @@ class _MyProductState extends State<MyProduct> {
                                                           alignment: Alignment
                                                               .bottomLeft,
                                                           child: Text(
-                                                            product['price'],
+
+                                                            '-N- ${format.format(int.parse(product['price']))}',
                                                             style: TextStyle(
                                                                 fontFamily:
                                                                     'Genuine',
-                                                                fontSize: 16,
+                                                                fontSize: 14,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w200),
@@ -327,9 +334,13 @@ class _MyProductState extends State<MyProduct> {
                                                         // alignment: Alignment.center,
                                                         color: primaryGreen,
                                                         onPressed: () {
-                                                          _launcher(
-                                                              product['phone']
-                                                                  .toString());
+                                                          Navigator.push(context, 
+                                                          MaterialPageRoute(
+                                                            builder: (_)=>EditMyProduct(
+                                                              address: product['Location'], 
+                                                              phone: product['Phone'],
+                                                              description: product['Description'],
+                                                              price: product['price'],)));
                                                         },
                                                       ),
                                                     ),

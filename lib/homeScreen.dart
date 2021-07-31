@@ -59,8 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
       duration: Duration(milliseconds: 250),
       child: Stack(children: <Widget>[
         Container(
-          margin: EdgeInsets.symmetric(
-            vertical: 22,
+          margin: EdgeInsets.only(
+            top: 32,
           ),
           child: Column(
             children: <Widget>[
@@ -101,18 +101,23 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                     Column(
                       children: <Widget>[
-                        Text('Location'),
+                        Text('Location',
+                              style: TextStyle(
+                                   fontSize: 14
+                                  ),),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Icon(
                               Icons.add_location,
                               color: primaryGreen,
+                              size: 19,
                             ),
                             Text(
                               'Ukraine',
                               style: TextStyle(
-                                  fontFamily: 'Genuine', fontSize: 18),
+                                  fontFamily: 'Genuine', fontSize: 14
+                                  ),
                             ),
                           ],
                         ),
@@ -126,8 +131,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(18))),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                margin: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                margin: EdgeInsets.only(top: 10, bottom: 20, left: 30, right: 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[

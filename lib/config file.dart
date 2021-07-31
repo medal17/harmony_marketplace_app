@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:trainapp/myProduct.dart';
 import 'package:trainapp/profileScreen.dart';
 import 'package:trainapp/sellProduct.dart';
 import 'package:trainapp/wishList.dart';
 
 import 'MessageList.dart';
+
+  final format = new NumberFormat("#,##0", "en_US");
+
 
 Color primaryGreen = Color(0xff004240);
 List<BoxShadow> shadowList = [
