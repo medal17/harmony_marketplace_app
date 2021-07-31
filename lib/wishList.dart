@@ -42,7 +42,6 @@ class _WishListState extends State<WishList> {
   void getData() async {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
-    ;
     //use a Async-await function to get the data
     print(authNotifier.user.email);
     final data = await Firestore.instance
@@ -60,6 +59,8 @@ class _WishListState extends State<WishList> {
 
   @override
   Widget build(BuildContext context) {
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
     getData();
     // print(snapshot.data.productId);
     // Stream myWishes = Firestore.instance
@@ -162,27 +163,41 @@ class _WishListState extends State<WishList> {
                       //     .document('H72sfDgCj3lfUQHj0ChQ')
                       //     .snapshots(),
                       builder: (context, snapshot) {
-                        List<DocumentSnapshot> myProducts =
-                            new List<DocumentSnapshot>();
-                        for (int i = 0;
-                            i < snapshot.data.documents.length;
-                            i++) {
-                          myProducts.add(snapshot.data.documents[i]);
-                          print(myProducts.length);
-                        }
-                        final prod = Firestore.instance
-                            .collection("product")
-                            .where(FieldPath.documentId, whereIn: [
-                          myProducts[0]['productId']
-                        ]).getDocuments();
-                        // print(prod.map((e) => e));
                         return StreamBuilder(
                             stream: Firestore.instance
-                                .collection("product")
-                                .where(FieldPath.documentId, whereIn: [
-                              myProducts[0]['productId']
-                            ]).snapshots(),
+                                .collection("wishList")
+                                .where('user',
+                                    isEqualTo: authNotifier.user.email)
+                                .snapshots(),
                             builder: (context, snapshot) {
+                              if (snapshot.connectionState == 'true') {
+                                return Center(
+                                  child: SizedBox(
+                                    child: Column(
+                                      children: [
+                                        CircularProgressIndicator(
+                                          backgroundColor: primaryGreen,
+                                        ),
+                                        Text('Loading Data')
+                                      ],
+                                    ),
+                                    height: 60,
+                                    width: 60,
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                  child: Column(
+                                    children: [
+                                      Icon(Icons.broken_image),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text('${snapshot.error}')
+                                    ],
+                                  ),
+                                );
+                              }
                               // print(myProducts[myProducts.length]['productId']);
                               return ListView.builder(
                                 itemCount: snapshot.data.documents.length,
@@ -191,13 +206,6 @@ class _WishListState extends State<WishList> {
                                   //     ['productId']);
                                   final product =
                                       snapshot.data.documents[index];
-                                  // print(snapshot.data.documents[index]['type']
-                                  //     .contains('Uk'));
-                                  // if (snapshot.data.documents[index]['type']
-                                  //     .contains('Uk')) {
-                                  //   print(snapshot.data.documents[index]
-                                  //       ['title']);
-                                  // }
                                   return GestureDetector(
                                     onTap: () {
                                       Navigator.push(context, MaterialPageRoute(
@@ -334,7 +342,7 @@ class _WishListState extends State<WishList> {
                                                     alignment:
                                                         Alignment.bottomCenter,
                                                     child: Row(
-                                                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                       children: <Widget>[
                                                         Expanded(
                                                           flex: 3,

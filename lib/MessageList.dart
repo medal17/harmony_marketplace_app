@@ -53,7 +53,7 @@ class _MessageUiState extends State<MessageUi> {
     return Scaffold(
       body: AnimatedContainer(
         decoration: BoxDecoration(
-          color: primaryGreen.withOpacity(0.1),
+          color: primaryGreen.withOpacity(0.01),
           borderRadius: BorderRadius.all(Radius.circular(isMinimized ? 18 : 0)),
         ),
         duration: Duration(milliseconds: 250),
@@ -129,17 +129,25 @@ class _MessageUiState extends State<MessageUi> {
                       : StreamBuilder(
                           stream: recievedMessages,
                           builder: (context, snapshot1) {
+                            // final reducedList = [];
+
+                            //   list.reduce((value, element) {
+                            //       if (value != element)
+                            //           reducedList.add(value);
+                            //       return element;
+                            //   });
+
+                            //   reducedList.add(list.last);
                             List<DocumentSnapshot> people =
                                 new List<DocumentSnapshot>();
                             for (int i = 0;
                                 i < snapshot1.data.documents.length;
                                 i++) {
                               msgs.add(snapshot1.data.documents[i]);
-                              print(msgs[0]['sender']);
+                              // print(msgs[0]['sender']);
                             }
                             // messages.add(people);
-                            // messages.add(people1);
-                            print(messages.length);
+                            // messages.add(people1)
                             return ListView.builder(
                                 itemCount: snapshot1.data.documents.length +
                                     snapshot.data.documents

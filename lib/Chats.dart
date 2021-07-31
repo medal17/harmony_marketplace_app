@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trainapp/model/messageModel.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //import 'package:trainapp/model/messageModel.dart';
 import 'package:trainapp/notifier/Auth_Notifier.dart';
@@ -119,8 +120,12 @@ class _ChatsState extends State<Chats> {
     );
   }
 
+  List<DocumentSnapshot> msgs = new List<DocumentSnapshot>();
+  TextEditingController messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    // print(widget.user);
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     return Scaffold(
@@ -135,33 +140,62 @@ class _ChatsState extends State<Chats> {
                 child: StreamBuilder(
                   stream: Firestore.instance
                       .collection('messages')
-                      .where('reciever', isEqualTo: authNotifier.user.email)
+                      .where('reciever', isEqualTo: widget.reciever)
+                      .where('sender', isEqualTo: widget.user)
                       .snapshots(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    return snapshot.hasData
-                        ? ListView.builder(
-                            itemCount: snapshot.data.documents.length,
-                            itemBuilder: (BuildContext ctx, int index) {
-                              final message = snapshot.data.documents[index];
-                              // print(message);
-                              // authNotifier.user.email
-                              final bool isMe =
-                                  message['sender'] == authNotifier.user.email;
-                              //     ||
-                              // message['reciever'] ==
-                              //     authNotifier.user.email;
-                              //final chat= messages[index]; //message.sender.id == me.id || message.reciever.id == me.id ?;
-                              return loadMessage(message, isMe);
-                            })
-                        : Column(
-                            children: [
-                              IconButton(
-                                onPressed: null,
-                                icon: Icon(Icons.hourglass_empty),
-                              ),
-                              Text('No Messages'),
-                            ],
-                          );
+                  builder: (BuildContext context, AsyncSnapshot snapshot1) {
+                    List<DocumentSnapshot> people1 =
+                        new List<DocumentSnapshot>();
+                    for (int i = 0; i < snapshot1.data.documents.length; i++) {
+                      msgs.add(snapshot1.data.documents[i]);
+                      print(msgs.length);
+                    }
+                    return snapshot1.hasError
+                        ? Text(snapshot1.error.toString())
+                        : StreamBuilder(
+                            stream: Firestore.instance
+                                .collection('messages')
+                                .where('sender', isEqualTo: widget.reciever)
+                                .where('reciever', isEqualTo: widget.user)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              List<DocumentSnapshot> people =
+                                  new List<DocumentSnapshot>();
+                              for (int i = 0;
+                                  i < snapshot.data.documents.length;
+                                  i++) {
+                                msgs.add(snapshot.data.documents[i]);
+                                // print(snapshot.data.documents[i]['message']);
+                              }
+                              return snapshot.hasData
+                                  ? ListView.builder(
+                                      itemCount:
+                                          snapshot.data.documents.length +
+                                              snapshot1.data.documents.length,
+                                      itemBuilder:
+                                          (BuildContext ctx, int index) {
+                                        final message = msgs;
+                                        // print(message);
+                                        // authNotifier.user.email
+                                        final bool isMe = msgs[index]
+                                                ['sender'] ==
+                                            authNotifier.user.email;
+                                        //     ||
+                                        // message['reciever'] ==
+                                        //     authNotifier.user.email;
+                                        //final chat= messages[index]; //message.sender.id == me.id || message.reciever.id == me.id ?;
+                                        return loadMessage(msgs[index], isMe);
+                                      })
+                                  : Column(
+                                      children: [
+                                        IconButton(
+                                          onPressed: null,
+                                          icon: Icon(Icons.hourglass_empty),
+                                        ),
+                                        Text('No Messages'),
+                                      ],
+                                    );
+                            });
                   },
                 ),
               ),
@@ -176,7 +210,7 @@ class _ChatsState extends State<Chats> {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: Colors.grey.withOpacity(0.3),
+                        color: Colors.grey.withOpacity(0.2),
                         boxShadow: shadowList),
                     child: Row(
                       children: <Widget>[
@@ -189,6 +223,7 @@ class _ChatsState extends State<Chats> {
                         ),
                         Expanded(
                             child: TextField(
+                          controller: messageController,
                           decoration: InputDecoration(
                               hintText: "Type something",
                               border: InputBorder.none),
@@ -208,16 +243,22 @@ class _ChatsState extends State<Chats> {
                 SizedBox(
                   width: 15,
                 ),
-                Container(
-                  height: 48,
-                  padding: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      color: primaryGreen,
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: InkWell(
-                    child: Icon(
-                      Icons.send,
-                      color: Colors.white,
+                GestureDetector(
+                  onTap: () {
+                    print(messageController.text);
+                    messageController.clear();
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    decoration: BoxDecoration(
+                        color: primaryGreen,
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child: Center(
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 )
