@@ -81,6 +81,7 @@ createProduct(LocalUser _user, Products product) async {
         'Description': product.productDescription,
         'price': product.productPrice,
         'type': product.type,
+        'category': product.category,
         'picture1': product.picture,
         'title': product.productName,
         'negotiable': product.negotiable

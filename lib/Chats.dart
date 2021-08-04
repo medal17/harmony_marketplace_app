@@ -225,8 +225,9 @@ class _ChatsState extends State<Chats> {
                             child: TextField(
                           controller: messageController,
                           decoration: InputDecoration(
-                              hintText: "Type something",
-                              border: InputBorder.none),
+                            hintText: "Type something",
+                            border: InputBorder.none,
+                          ),
                         )),
                         //IconButton(icon: Icon(Icons.camera_alt), onPressed: () {},),
                         IconButton(
@@ -245,7 +246,7 @@ class _ChatsState extends State<Chats> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    print(messageController.text);
+                    // print(messageController.text);
                     messageController.clear();
                   },
                   child: Container(
