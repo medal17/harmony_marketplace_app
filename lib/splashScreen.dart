@@ -20,31 +20,40 @@ class _SplashScreenState extends State<SplashScreen> {
   double width = 150.0;
 
   // ignore: non_constant_identifier_names
- 
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     startTime();
   }
+
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-        home: Scaffold(
-    body: Center(
-      child: Container(
-        child: Image.asset('images/hmplace.png', height: height,width: width,)),
-    ),
+      home: Scaffold(
+        body: Center(
+          child: Container(
+              child: Image.asset(
+            'images/hmplace.png',
+            height: height,
+            width: width,
+          )),
         ),
-      );
+      ),
+    );
   }
-  startTime() async{
+
+  startTime() async {
     Duration duration = Duration(seconds: 4);
-    return Timer(duration, (){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Consumer<AuthNotifier>(
-        builder: (context, notifier, child){
-          return notifier.user != null ? GateWay() : LogInScreen();
-        },
-      )));
+    return Timer(duration, () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Consumer<AuthNotifier>(
+                    builder: (context, notifier, child) {
+                      return notifier.user != null ? GateWay() : LogInScreen();
+                    },
+                  )));
     });
   }
 }

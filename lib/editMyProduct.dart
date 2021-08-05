@@ -8,13 +8,14 @@ import 'config file.dart';
 import 'notifier/Auth_Notifier.dart';
 //import 'package:trainapp/model/userModel.dart';
 
-class ProfileForm extends StatelessWidget {
-  String user;
+class EditMyProduct extends StatelessWidget {
+  String description;
   String address;
   String city;
   String phone;
+  String price;
   String id;
-  ProfileForm({this.user, this.address, this.city, this.phone, this.id});
+  EditMyProduct({this.description, this.address, this.city, this.phone, this.id, this.price});
   // final string location;
   // final shot;
   // ProfileForm();
@@ -29,11 +30,12 @@ class ProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController userController = TextEditingController(text: user);
+    TextEditingController userController = TextEditingController(text: description);
     TextEditingController addressController =
         TextEditingController(text: address);
     TextEditingController cityController = TextEditingController(text: address);
     TextEditingController phoneController = TextEditingController(text: phone);
+    TextEditingController priceController = TextEditingController(text: price);
     // shot.toString();
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
@@ -55,11 +57,11 @@ class ProfileForm extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blueGrey[100],
       appBar: AppBar(
-        toolbarHeight: 50,
+        toolbarHeight: 40,
         backgroundColor: primaryGreen.withOpacity(0.9),
         title: Text(
-          'Edit Profile',
-          style: TextStyle(fontSize: 17),
+          'Edit Product',
+          style: TextStyle(fontSize: 14),
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_rounded),
@@ -72,26 +74,7 @@ class ProfileForm extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 1, horizontal: 25),
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                //color: primaryGreen,
-              ),
-              child: ClipOval(
-                  child: authNotifier.user.photoUrl != null
-                      ? CachedNetworkImage(
-                          height: 100,
-                          width: 100,
-                          imageUrl: authNotifier.user.photoUrl,
-                        )
-                      : Icon(
-                          Icons.account_circle,
-                          size: 90,
-                          color: primaryGreen,
-                        )),
-            ),
+            
             Form(
               key: _formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -99,7 +82,7 @@ class ProfileForm extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * .6,
+                  // height: MediaQuery.of(context).size.height * .6,
                   // color: Colors.blueGrey[100],
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -145,14 +128,14 @@ class ProfileForm extends StatelessWidget {
                                   controller: userController,
                                   // initialValue: user.toString(),
                                   decoration: InputDecoration(
-                                    labelText: 'Username',
-                                    labelStyle: TextStyle(),
+                                    labelText: 'Product Description',
+                                    labelStyle: TextStyle(fontSize: 14),
                                     // focusedBorder: InputBorder.none,
                                     border: InputBorder.none,
                                   ),
                                   validator: (String value) {
                                     if (value.isEmpty) {
-                                      return 'Input your Username';
+                                      return 'Input your Description';
                                     }
                                     if (value.length < 5) {
                                       return 'Username must be between 5 and 12';
@@ -193,7 +176,7 @@ class ProfileForm extends StatelessWidget {
                                   // initialValue: address,
                                   controller: addressController,
                                   decoration: InputDecoration(
-                                    labelText: 'Address',
+                                    labelText: 'Location',
                                     focusedBorder: InputBorder.none,
                                     border: InputBorder.none,
                                   ),
@@ -287,7 +270,7 @@ class ProfileForm extends StatelessWidget {
                                   // initialValue: phone,
                                   controller: phoneController,
                                   decoration: InputDecoration(
-                                    labelText: 'Phone',
+                                    labelText: 'Category',
                                     focusedBorder: InputBorder.none,
                                     border: InputBorder.none,
                                   ),
@@ -309,6 +292,55 @@ class ProfileForm extends StatelessWidget {
                           ],
                         ),
                       ),
+
+                      Container(
+                        height: 70,
+                        // padding: EdgeInsets.only(bottom: 5),
+                        padding: EdgeInsets.symmetric(vertical: 3),
+
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 1,
+                                    color: Colors.white,
+                                  ),
+                                  color: Colors.white.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(7)),
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: TextFormField(
+                                  style: TextStyle(fontSize: 14),
+                                  // initialValue: phone,
+                                  controller: priceController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Price',
+                                    focusedBorder: InputBorder.none,
+                                    border: InputBorder.none,
+                                  ),
+                                  // validator: (String value) {
+                                  //   if (value.isEmpty) {
+                                  //     return 'Input your Password';
+                                  //   }
+                                  //   if (value.length < 5 || value.length > 12) {
+                                  //     return 'Password must be between 5 and 12';
+                                  //   }
+                                  //   return null;
+                                  // },
+                                  onSaved: (String value) {
+                                    // _user.password = value;
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+
                       GestureDetector(
                         onTap: () {
                           if (!authNotifier.signInStatus) {
@@ -317,9 +349,9 @@ class ProfileForm extends StatelessWidget {
                           }
                         },
                         child: Container(
-                          margin: EdgeInsets.only(top: 5),
+                          margin: EdgeInsets.only(top: 20),
                           padding: EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 90),
+                              vertical: 12, horizontal: 40),
                           child: authNotifier.signInStatus
                               ? SizedBox(
                                   height: 25,
@@ -330,10 +362,11 @@ class ProfileForm extends StatelessWidget {
                                   ),
                                 )
                               : Text(
-                                  'Submit',
+                                  'Update Product',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'genuine',
+                                      fontWeight: FontWeight.w200,
                                       fontSize: 20),
                                 ),
                           decoration: BoxDecoration(

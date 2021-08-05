@@ -21,15 +21,25 @@ class _MyProductState extends State<MyProduct> {
   double yOffset = 0;
   double scaleFactor = 1;
   bool showNumber = false;
-
+  final snackBar = SnackBar(
+    content: Text('Delete! Confirm you wish to delete!'),
+    action: SnackBarAction(
+      label: 'Undo',
+      onPressed: () {
+        // Some code to undo the change.
+      },
+    ),
+  );
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: AnimatedContainer(
         decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius:
-            BorderRadius.all(Radius.circular(isMinimized ? 18 : 0))),
+                BorderRadius.all(Radius.circular(isMinimized ? 18 : 0))),
         transform: Matrix4.translationValues(xOffset, yOffset, 0)
           ..scale(scaleFactor),
         duration: Duration(milliseconds: 250),
@@ -42,32 +52,32 @@ class _MyProductState extends State<MyProduct> {
                 children: <Widget>[
                   isMinimized
                       ? IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        isMinimized = false;
-                        xOffset = 0;
-                        yOffset = 0;
-                        scaleFactor = 1;
-                      });
-                    },
-                  )
+                          icon: Icon(Icons.close),
+                          onPressed: () {
+                            setState(() {
+                              isMinimized = false;
+                              xOffset = 0;
+                              yOffset = 0;
+                              scaleFactor = 1;
+                            });
+                          },
+                        )
                       : IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      size: 28,
-                      color: primaryGreen,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        DrawerScreen();
-                        isMinimized = true;
-                        xOffset = 200;
-                        yOffset = 120;
-                        scaleFactor = 0.7;
-                      });
-                    },
-                  ),
+                          icon: Icon(
+                            Icons.menu,
+                            size: 28,
+                            color: primaryGreen,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              DrawerScreen();
+                              isMinimized = true;
+                              xOffset = 200;
+                              yOffset = 120;
+                              scaleFactor = 0.7;
+                            });
+                          },
+                        ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -75,7 +85,9 @@ class _MyProductState extends State<MyProduct> {
                         Icons.favorite_border,
                         color: primaryGreen,
                       ),
-                      SizedBox(width: 5,),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Text(
                         'My WishList',
                         style: TextStyle(fontFamily: 'Genuine', fontSize: 22),
@@ -98,82 +110,88 @@ class _MyProductState extends State<MyProduct> {
                     Text('Search for products'),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_)=>Filters()));
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => Filters()));
                       },
                       child: Icon(Icons.filter_list),
                     )
                   ],
                 ),
               ),
-
               Expanded(
                 child: Container(
                   color: Colors.white,
-
                   child: ListView.builder(
                     itemCount: productList.length,
                     itemBuilder: ((context, index) {
                       final product = productList[index];
                       return GestureDetector(
-
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) {
-                            return SingleProduct(product: product,);
-                          },));
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (_) {
+                              return SingleProduct(
+                                product: product,
+                              );
+                            },
+                          ));
                         },
                         child: Dismissible(
                           key: Key(product.productName),
-                            //confirmDismiss: (direction) =>promptUser(direction),
-                          onDismissed: (direction){
-                            
-                            Scaffold.of(context).showSnackBar(SnackBar(content:Text('deleted')));
-
+                          //confirmDismiss: (direction) =>promptUser(direction),
+                          onDismissed: (direction) {
+                            Scaffold.of(context).showSnackBar(
+                                SnackBar(content: Text('deleted')));
                           },
-                          background: Container(color: Colors.red,),
+                          background: Container(
+                            color: Colors.red,
+                          ),
                           child: Container(
                             margin: EdgeInsets.only(top: 7),
                             child: Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   boxShadow: shadowList,
-                                  borderRadius: BorderRadius.all(Radius.circular(15))),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(15))),
                               alignment: Alignment.topLeft,
                               padding: EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 0),
-                              height:
-                              MediaQuery
-                                  .of(context)
-                                  .size
-                                  .height * 0.2,
+                              height: MediaQuery.of(context).size.height * 0.2,
                               //width: MediaQuery.of(context).size.width*0.5,
                               child: Row(
                                 children: <Widget>[
                                   Container(
-
-                                    margin:EdgeInsets.only(right:12),
+                                    margin: EdgeInsets.only(right: 12),
                                     decoration: BoxDecoration(
                                         color: Colors.blueGrey,
-                                        borderRadius:
-                                        BorderRadius.only(topLeft:Radius.circular(35),bottomLeft:Radius.circular(35))),
-                                    height:
-                                    MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height * 0.3,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(35),
+                                            bottomLeft: Radius.circular(35))),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.3,
                                     child: ClipRRect(
-                                      borderRadius:BorderRadius.only(topLeft:Radius.circular(15), bottomLeft:Radius.circular(15)),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          bottomLeft: Radius.circular(15)),
                                       child: Image.asset(
-                                        productList[index].picture,
-                                        fit: BoxFit.cover,
-                                        height:MediaQuery.of(context).size.height*0.3,
-                                        width:MediaQuery.of(context).size.width*0.38
-                                      ),
+                                          productList[index].picture,
+                                          fit: BoxFit.cover,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.3,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.38),
                                     ),
                                   ),
                                   Column(
                                     //mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
-                                      SizedBox(height: 10,),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
                                       Text(
                                         productList[index].productName,
                                         style: TextStyle(
@@ -189,16 +207,31 @@ class _MyProductState extends State<MyProduct> {
                                             fontWeight: FontWeight.w800),
                                       ),
                                       Align(
-                                        alignment:Alignment.bottomRight,
+                                        alignment: Alignment.bottomRight,
                                         child: Container(
                                           //width: MediaQuery.of(context).size.width*0.2,
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: <Widget>[
                                               Text(productList[index].location),
-                                              SizedBox(width:15),
-                                              showNumber ? Text(productList[index].productName)
-                                                  : IconButton(icon: Icon(Icons.delete),iconSize:25,alignment:Alignment.center,color: primaryGreen, onPressed: () {},)
+                                              SizedBox(width: 15),
+                                              // Text(productList[index].productName)
+                                              IconButton(
+                                                  icon: Icon(Icons.delete),
+                                                  iconSize: 25,
+                                                  alignment: Alignment.center,
+                                                  color: primaryGreen,
+                                                  onPressed: () {
+                                                    _scaffoldKey.currentState
+                                                        .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                        'Welcome',
+                                                      ),
+                                                      duration:
+                                                          Duration(seconds: 2),
+                                                    ));
+                                                  })
                                             ],
                                           ),
                                         ),
@@ -222,4 +255,3 @@ class _MyProductState extends State<MyProduct> {
     );
   }
 }
-
