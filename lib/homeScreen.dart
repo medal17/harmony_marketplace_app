@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trainapp/chat.dart';
+import 'package:trainapp/api/Firebase_Api.dart';
 import 'package:trainapp/messenger_list.dart';
 import 'package:trainapp/notifier/Auth_Notifier.dart';
 // import 'package:url_launcher/link.dart';
@@ -46,10 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
 // Future<void>? _launched;
   @override
   Widget build(BuildContext context) {
-    // const String toLaunch = '08055848342';
+    getMessage();
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     Locale locale = Localizations.localeOf(context);
+
     return AnimatedContainer(
       decoration: BoxDecoration(
           boxShadow: shadowListBlack,
