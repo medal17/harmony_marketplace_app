@@ -225,8 +225,9 @@ class _ChatsState extends State<Chats> {
                             child: TextField(
                           controller: messageController,
                           decoration: InputDecoration(
-                              hintText: "Type something",
-                              border: InputBorder.none),
+                            hintText: "Type something",
+                            border: InputBorder.none,
+                          ),
                         )),
                         //IconButton(icon: Icon(Icons.camera_alt), onPressed: () {},),
                         IconButton(
@@ -245,14 +246,7 @@ class _ChatsState extends State<Chats> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    print(messageController.text);
-                    Firestore.instance.collection('messages').add({
-                      'message':messageController.text,
-                      'time': DateTime.now(),
-                      'sender':  authNotifier.user.email,
-                      'reciever': widget.reciever
-                    });
-                    // msgs.add({'hjhjhh':''});
+                    // print(messageController.text);
                     messageController.clear();
 
                   },

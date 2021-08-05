@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trainapp/chat.dart';
+import 'package:trainapp/api/Firebase_Api.dart';
+import 'package:trainapp/messenger_list.dart';
 import 'package:trainapp/notifier/Auth_Notifier.dart';
 // import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -44,10 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
 // Future<void>? _launched;
   @override
   Widget build(BuildContext context) {
-    // const String toLaunch = '08055848342';
+    getMessage();
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
     Locale locale = Localizations.localeOf(context);
+
     return AnimatedContainer(
       decoration: BoxDecoration(
           boxShadow: shadowListBlack,
@@ -426,9 +430,16 @@ class _HomeScreenState extends State<HomeScreen> {
           margin: EdgeInsets.only(right: 10, bottom: 5),
           alignment: Alignment.bottomRight,
           child: FloatingActionButton(
+            mini: true,
             backgroundColor: primaryGreen,
-            onPressed: () {},
-            child: Icon(Icons.notifications),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => MessengerList()));
+            },
+            child: Icon(
+              Icons.notifications,
+              size: 18,
+            ),
           ),
         )
       ]),

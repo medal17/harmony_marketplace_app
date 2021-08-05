@@ -6,8 +6,6 @@ import 'package:trainapp/model/modelData.dart';
 import 'package:trainapp/model/userModel.dart';
 import 'package:trainapp/notifier/Auth_Notifier.dart';
 
-//import '../gateWay.dart';
-
 //String status = '';
 login(LocalUser user, AuthNotifier authNotifier) async {
   final result = await FirebaseAuth.instance
@@ -81,10 +79,40 @@ createProduct(LocalUser _user, Products product) async {
         'Description': product.productDescription,
         'price': product.productPrice,
         'type': product.type,
+        'category': product.category,
         'picture1': product.picture,
         'title': product.productName,
         'negotiable': product.negotiable
       })
       .then((value) => print('Product Inserted'))
       .catchError((error) => print(error.code));
+}
+
+getMessage() async {
+  List messages = new List();
+  //DocumentReference firestore =
+  final result = await Firestore.instance
+      .collection('messages')
+      .where('sender', isEqualTo: 'iyandaadeshina@gmail.com')
+      .getDocuments()
+      .then((value) async {
+    final result1 = await Firestore.instance
+        .collection('messages')
+        .where('reciever', isEqualTo: 'iyandaadeshina@gmail.com')
+        .getDocuments()
+        .then((value) {
+      for (int i = 0; i < value.documents.length; i++) {
+        messages.add(value.documents[i].data);
+        // print(messages.length);
+      }
+    });
+    for (int i = 0; i < value.documents.length; i++) {
+      messages.add(value.documents[i].data);
+      // print(messages);
+    }
+  });
+  // print(result);
+  print(messages);
+
+  return messages;
 }

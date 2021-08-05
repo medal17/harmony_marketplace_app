@@ -53,7 +53,7 @@ class _MessageUiState extends State<MessageUi> {
     return Scaffold(
       body: AnimatedContainer(
         decoration: BoxDecoration(
-          color: primaryGreen.withOpacity(0.01),
+          color: primaryGreen.withOpacity(0.1),
           borderRadius: BorderRadius.all(Radius.circular(isMinimized ? 18 : 0)),
         ),
         duration: Duration(milliseconds: 250),
@@ -212,7 +212,7 @@ class _MessageUiState extends State<MessageUi> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: <Widget>[
-                                              Text(chat['time']),
+                                              Text(chat['time'].toString()),
                                               chat['status'] == 'read'
                                                   ? Text('')
                                                   : Container(
@@ -223,7 +223,8 @@ class _MessageUiState extends State<MessageUi> {
                                                             BorderRadius.all(
                                                           Radius.circular(20.0),
                                                         ),
-                                                        color: Colors.redAccent,
+                                                        color: Colors.redAccent
+                                                            .withOpacity(0.3),
                                                       ),
                                                       alignment:
                                                           Alignment.center,
