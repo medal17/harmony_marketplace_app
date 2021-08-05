@@ -99,7 +99,7 @@ class _ChatsState extends State<Chats> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           Text(
-            message['time'] != null ? message['time'] : '',
+            message['time'] != null ? message['time'].toString().substring(0,5) : '',
           ),
           myMessage,
         ],
@@ -113,7 +113,7 @@ class _ChatsState extends State<Chats> {
         children: <Widget>[
           myMessage,
           Text(
-            message['time'] != null ? message['time'] : '',
+            message['time'] != null ? message['time'].toString() : '',
           ),
         ],
       ),
@@ -246,7 +246,15 @@ class _ChatsState extends State<Chats> {
                 GestureDetector(
                   onTap: () {
                     print(messageController.text);
+                    Firestore.instance.collection('messages').add({
+                      'message':messageController.text,
+                      'time': DateTime.now(),
+                      'sender':  authNotifier.user.email,
+                      'reciever': widget.reciever
+                    });
+                    // msgs.add({'hjhjhh':''});
                     messageController.clear();
+
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 8),
