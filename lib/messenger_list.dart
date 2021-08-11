@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class MessengerList extends StatefulWidget {
 // https://aratam.com/api/v2/api-get-conversation-details/{id}
 
 class _MessengerListState extends State<MessengerList> {
+  final ScrollController _scrollController = ScrollController();
   // fetchData() async {
   //   final response = await http.get(
   //     Uri.parse("${AppConfig.BASE_URL}/api-get-conversation/"),
@@ -31,7 +33,7 @@ class _MessengerListState extends State<MessengerList> {
   // print(response.body);
   // print(access_token.value);
   // }
-
+  // => ["a", "b", "c", "d"]
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,12 +66,15 @@ class _MessengerListState extends State<MessengerList> {
   SingleChildScrollView buildMessengerList() {
     return SingleChildScrollView(
       child: ListView.builder(
+        controller: _scrollController,
         itemCount: messengerList.length,
         scrollDirection: Axis.vertical,
         padding: EdgeInsets.all(0.0),
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, index) {
+          print(MessengerList);
+
           return Padding(
             padding: const EdgeInsets.only(
                 top: 4.0, bottom: 4.0, left: 16.0, right: 16.0),
@@ -83,6 +88,10 @@ class _MessengerListState extends State<MessengerList> {
   buildMessengerItemCard(index) {
     return GestureDetector(
       onTap: () {
+        // List<String> result =
+        //     LinkedHashSet<String>.from(messengerList).toList();
+        // print(distinctMessengerList);
+
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return Chat(
             messenger_name: messengerList[index].name,

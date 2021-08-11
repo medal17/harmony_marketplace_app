@@ -1,3 +1,5 @@
+import 'api/Firebase_Api.dart';
+
 class AChat {
   String text;
   String date;
@@ -14,6 +16,9 @@ class AChat {
 }
 
 final List<AChat> chatList = [
+  // getMessage().map((e) => AChat(text: e.message)),
+  // AChat(text: getMessage().message, is_sender: true)
+
   AChat(
       text:
           "Hey, do you have 3rd party charger of iPhone. I want to buy a black color.",

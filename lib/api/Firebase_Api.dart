@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:trainapp/dummy_chats.dart';
+import 'package:trainapp/messenger_list.dart';
+import 'package:trainapp/messengers.dart';
 //import 'package:flutter/cupertino.dart';
 //import 'package:flutter/material.dart';
 import 'package:trainapp/model/modelData.dart';
@@ -112,7 +115,61 @@ getMessage() async {
     }
   });
   // print(result);
-  print(messages);
+  print(messages[0]['sender']);
+  // messages.toList().map((e) => e)
+  for (int i = 0; i < messages.length; i++) {
+    // print(messages[i]['sender']);
+    // messages.add(message.documents[i].data);
+    messengerList.add(Messenger(
+        id: '${i * 2}',
+        name: messages[i]['sender'] != 'iyandaadeshina@gmail.com'
+            ? messages[i]['sender']
+            : messages[i]['reciever'],
+        image: 'images/shirt.jpg'));
+    // print(messages);
+  }
+  return messages;
+}
 
+getSingleMessage(String sender, String reciever) async {
+  List messages = new List();
+  //DocumentReference firestore =
+  final result = await Firestore.instance
+      .collection('messages')
+      .where('sender', isEqualTo: reciever)
+      .where('reciever', isEqualTo: sender)
+      .getDocuments()
+      .then((value) async {
+    final result1 = await Firestore.instance
+        .collection('messages')
+        .where('reciever', isEqualTo: reciever)
+        .where('sender', isEqualTo: sender)
+        .getDocuments()
+        .then((value) {
+      for (int i = 0; i < value.documents.length; i++) {
+        messages.add(value.documents[i].data);
+        // print(messages.length);
+      }
+    });
+    for (int i = 0; i < value.documents.length; i++) {
+      messages.add(value.documents[i].data);
+      // print(messages);
+    }
+  });
+  // print(result);
+  // print(messages[0]['sender']);
+  // messages.toList().map((e) => e)
+  for (int i = 0; i < messages.length; i++) {
+    // print(messages[i]['sender']);
+    // messages.add(message.documents[i].data);
+
+    chatList.add(AChat(
+        text: messages[i]['message'],
+        date: messages[i]['time'],
+        is_sender: messages[i]['sender'] == sender ? true : false,
+        messageBuddy: reciever,
+        time: messages[i]['time']));
+    print(messages);
+  }
   return messages;
 }

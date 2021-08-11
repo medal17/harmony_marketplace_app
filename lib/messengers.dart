@@ -77,3 +77,7 @@ final List<Messenger> messengerList = [
     name: "ACTIV ECOMMERCE CMS",
   ),
 ];
+
+final List<Messenger> distinctMessengerList = [
+  // ...{...messengerList}
+];

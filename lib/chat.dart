@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trainapp/api/Firebase_Api.dart';
 import 'package:trainapp/config%20file.dart';
 // import 'package:active_ecommerce_flutter/my_theme.dart';
 // import 'package:active_ecommerce_flutter/dummy_data/chats.dart';
@@ -31,8 +32,17 @@ class _ChatState extends State<Chat> {
   final lastKey = GlobalKey();
   List<AChat> chats;
 
+  // void ScrollBottom(_chatScrollController) {
+  //   _chatScrollController.animateTo(
+  //       _chatScrollController.position.maxScrollExtent,
+  //       duration: Duration(milliseconds: 200),
+  //       curve: Curves.easeInOut);
+  // }
+
   @override
   Widget build(BuildContext context) {
+    // _chatScrollController.jumpTo(3000);
+    // ScrollBottom(_chatScrollController);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: buildAppBar(context),
@@ -132,8 +142,8 @@ class _ChatState extends State<Chat> {
     );
   }
 
-  SingleChildScrollView buildChatList() {
-    return SingleChildScrollView(
+  buildChatList() {
+    return Container(
       child: ListView.builder(
         key: lastKey,
         controller: _chatScrollController,
@@ -161,7 +171,7 @@ class _ChatState extends State<Chat> {
             chatList[index].date,
             chatList[index].time)
         : getReceiverView(
-            ChatBubbleClipper5(type: BubbleType.receiverBubble),
+            ChatBubbleClipper5(type: BubbleType.receiverBubble, radius: 20),
             context,
             chatList[index].text,
             chatList[index].date,
